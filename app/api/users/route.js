@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GetUsers } from "../repositories/UserRepository";
+import { CreateUser, GetUsers } from "../repositories/UserRepository";
 
 export async function GET() {
 	try {
@@ -23,11 +23,24 @@ export async function GET() {
  * @param {NextRequest} request
  */
 export async function POST(request) {
-	const data = await request.json();
+	try {
+		const body = await request.json();
 
-	return NextResponse.json({
-		status: 200,
-		data: "Sample POST request",
-		message: "OK",
-	});
+		await CreateUser({
+			name: body.name,
+			username: body.username,
+			password: body.password,
+		});
+
+		return NextResponse.json(
+			{ status: 201, data: body, message: "Ok" },
+			{ status: 201 }
+		);
+	} catch (err) {
+		return NextResponse.error().json({
+			status: 500,
+			data: null,
+			message: "Internal Server Error",
+		});
+	}
 }
