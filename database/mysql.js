@@ -1,14 +1,5 @@
 import mysql from "mysql2";
 
-console.log(
-	"mysql file",
-	process.env.DB_HOST,
-	process.env.DB_USER,
-	process.env.DB_PASSWORD,
-	process.env.DB_DATABASE,
-	process.env.DB_CONNECTION_LIMIT
-);
-
 let pool = mysql.createPool({
 	connectionLimit: process.env.DB_CONNECTION_LIMIT,
 	host: process.env.DB_HOST,
