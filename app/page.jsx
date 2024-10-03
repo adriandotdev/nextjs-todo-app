@@ -1,7 +1,8 @@
+import { redirect, RedirectType } from "next/navigation";
 import React from "react";
 
 const RootPage = () => {
-	return <div>RootPage</div>;
+	return redirect("/signup", RedirectType.replace);
 };
 
 export default RootPage;
