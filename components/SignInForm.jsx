@@ -1,30 +1,60 @@
 "use client";
 
 import React from "react";
+import { useForm } from "react-hook-form";
 import axios from "axios";
+import { CircularProgress } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 const SignInForm = () => {
-	const SignIn = async (e) => {
-		e.preventDefault();
+	const {
+		register,
+		handleSubmit,
+		watch,
+		formState: { errors, isSubmitting },
+		reset,
+	} = useForm();
 
-		const data = await axios.get("/api/users");
+	const router = useRouter();
 
-		console.log(data);
+	const SignIn = async (data) => {
+		const result = await axios.post("/api/users/signin", {
+			username: data.username,
+			password: data.password,
+		});
+
+		if (result.status === 200) router.push("/signup");
 	};
 
 	return (
-		<form onSubmit={SignIn} className="flex flex-col gap-4 w-full" action="">
+		<form
+			onSubmit={handleSubmit(SignIn)}
+			className="flex flex-col gap-4 w-full"
+			action=""
+		>
 			<section className="flex flex-col gap-1">
-				<label className="font-medium" htmlFor="name">
+				<label className="font-medium" htmlFor="username">
 					Username
 				</label>
 				<input
-					className="border p-2"
+					{...register("username", {
+						required: "Please provide your username",
+					})}
+					className={`p-2 border ${
+						errors.username?.message
+							? "border-red-500 outline-red-500"
+							: "border outline-black"
+					}`}
 					type="text"
-					name="name"
-					id="name"
+					name="username"
+					id="username"
 					placeholder="Please provide your username"
 				/>
+				{errors.username?.message && (
+					<small className={errors.username?.message && "text-red-500"}>
+						{errors.username?.message}
+					</small>
+				)}
 			</section>
 
 			<section className="flex flex-col gap-1">
@@ -32,19 +62,32 @@ const SignInForm = () => {
 					Password
 				</label>
 				<input
-					className="border p-2"
+					{...register("password", {
+						required: "Please provide your password",
+					})}
+					className={`p-2 border ${
+						errors.username?.message
+							? "border-red-500 outline-red-500"
+							: "border outline-black"
+					}`}
 					type="password"
 					name="password"
 					id="password"
 					placeholder="Please provide your password"
 				/>
+				{errors.password?.message && (
+					<small className={errors.password?.message && "text-red-500"}>
+						{errors.password?.message}
+					</small>
+				)}
 			</section>
 
-			<input
+			<button
+				disabled={isSubmitting}
 				className="font-bold bg-slate-900 text-white p-3 mt-3 cursor-pointer hover:bg-slate-800 transition-all active:scale-110 active:bg-slate-600 rounded-md"
-				type="submit"
-				value="Sign In"
-			/>
+			>
+				{isSubmitting ? <CircularProgress size="1em" /> : "Sign In"}
+			</button>
 		</form>
 	);
 };

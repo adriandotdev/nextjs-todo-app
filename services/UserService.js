@@ -3,6 +3,8 @@ import { HttpBadRequest, HttpInternalServerError } from "@utils/HttpError";
 
 import bcrypt from "bcrypt";
 
+import { encrypt } from "@utils/Session";
+
 export default class UserService {
 	/**
 	 * @type {UserRepository}
@@ -31,6 +33,16 @@ export default class UserService {
 			});
 		} catch (err) {
 			console.log(err);
+			throw err;
+		}
+	}
+
+	async SignIn({ username, password }) {
+		try {
+			const jwt = await encrypt({ username });
+
+			return jwt;
+		} catch (err) {
 			throw err;
 		}
 	}
