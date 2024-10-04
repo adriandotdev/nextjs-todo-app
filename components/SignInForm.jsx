@@ -23,7 +23,7 @@ const SignInForm = () => {
 			password: data.password,
 		});
 
-		if (result.status === 200) router.push("/signup");
+		if (result.status === 200) router.push("/todo");
 	};
 
 	return (
