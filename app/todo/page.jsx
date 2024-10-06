@@ -1,7 +1,7 @@
-import React from "react";
+import { redirect, RedirectType } from "next/navigation";
 
 const TodoPage = () => {
-	return <div>TodoPage</div>;
+	return redirect("/todo/list", RedirectType.replace);
 };
 
 export default TodoPage;

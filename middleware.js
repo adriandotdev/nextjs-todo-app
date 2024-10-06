@@ -9,7 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
  */
 export default async function middleware(request) {
 	console.log(request.nextUrl.pathname);
-	if (request.nextUrl.pathname === "/todo") {
+	if (request.nextUrl.pathname.match(/\/todo\/*/)) {
 		const result = cookies().get("session");
 
 		if (!result || !result.value)

@@ -10,9 +10,7 @@ const SignInForm = () => {
 	const {
 		register,
 		handleSubmit,
-		watch,
 		formState: { errors, isSubmitting },
-		reset,
 	} = useForm();
 
 	const router = useRouter();
@@ -23,7 +21,7 @@ const SignInForm = () => {
 			password: data.password,
 		});
 
-		if (result.status === 200) router.push("/todo");
+		if (result.status === 200) router.push("/todo/list");
 	};
 
 	return (
