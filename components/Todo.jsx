@@ -17,7 +17,7 @@ const Todo = ({ todo, setDraggedElement }) => {
 
 	return (
 		<div
-			className="draggable bg-white flex gap-3 items-center border border-gray-200 p-2 max-w-[30rem] w-full mt-5 cursor-move "
+			className="draggable bg-white flex justify-between items-center gap-3 border border-gray-200 p-2 max-w-[30rem] w-full mt-5 cursor-move "
 			draggable="true"
 			onDragStart={OnDragStart}
 			onDragEnd={OnDragEnd}
