@@ -39,6 +39,22 @@ export default class UserService {
 
 	async SignIn({ username, password }) {
 		try {
+			const user = await this.#repository.IsUsernameExists(username);
+
+			if (!user.length)
+				throw new HttpBadRequest("INVALID_CREDENTIALS", {
+					message: "Invalid credentials",
+				});
+
+			const hashedPassword = user[0].password;
+
+			const isPasswordCorrect = await bcrypt.compare(password, hashedPassword);
+
+			if (!isPasswordCorrect)
+				throw new HttpBadRequest("INVALID_CREDENTIALS", {
+					message: "Invalid credentials",
+				});
+
 			const jwt = await encrypt({ username });
 
 			return jwt;

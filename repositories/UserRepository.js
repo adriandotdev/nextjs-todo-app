@@ -4,7 +4,8 @@ export default class UserRepository {
 	IsUsernameExists(username) {
 		const QUERY = `
 		SELECT
-			username
+			username,
+			password
 		FROM
 			users
 		WHERE
