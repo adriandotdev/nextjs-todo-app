@@ -13,8 +13,6 @@ import { CircularProgress } from "@mui/material";
 import { useFormStatus } from "react-dom";
 
 const SignUpForm = () => {
-	const pending = useFormStatus();
-	const [loading, setLoading] = useState(() => false);
 	const [alert, setAlert] = useState(() => ({
 		is_visible: false,
 		message: "",
@@ -65,7 +63,6 @@ const SignUpForm = () => {
 				reset();
 			}
 		} catch (err) {
-			console.log(err);
 			if (err.status !== 200) {
 				setAlert({
 					is_visible: true,
