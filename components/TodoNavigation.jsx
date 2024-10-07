@@ -15,7 +15,7 @@ const TodoNavigation = () => {
 
 	return (
 		<>
-			<ul className="text-white flex gap-5 px-10 py-5 justify-end items-center">
+			<ul className="text-white flex gap-5 px-2 py-5 justify-end items-center lg:px-10">
 				<li>
 					<Link href="/todo/list">Todo</Link>
 				</li>
