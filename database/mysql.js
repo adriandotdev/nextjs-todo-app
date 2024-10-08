@@ -7,6 +7,8 @@ let pool = mysql.createPool({
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_DATABASE,
 	multipleStatements: true,
+	port: process.env.DB_PORT,
+	connectTimeout: 20000,
 });
 
 pool.getConnection(function (err, connection) {
