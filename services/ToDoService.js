@@ -13,4 +13,21 @@ export default class ToDoService {
 	constructor(repository) {
 		this.#repository = repository;
 	}
+
+	async CreateToDo(data) {
+		try {
+			await this.#repository.CreateToDo(data);
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	async GetTodosByUserId(data) {
+		try {
+			const todos = await this.#repository.GetTodosByUserId(data);
+			return todos;
+		} catch (err) {
+			throw err;
+		}
+	}
 }
