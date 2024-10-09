@@ -5,7 +5,7 @@ export async function GET() {
 	try {
 		cookies().delete("session");
 
-		return NextResponse.json(
+		return Response.json(
 			{
 				status: 200,
 				data: null,
@@ -14,7 +14,7 @@ export async function GET() {
 			{ status: 200 }
 		);
 	} catch (err) {
-		return NextResponse.json(
+		return Response.json(
 			{
 				status: err.status || 500,
 				data: err.data || null,

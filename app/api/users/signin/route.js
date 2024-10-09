@@ -28,7 +28,7 @@ export async function POST(request) {
 			path: "/",
 		});
 
-		return NextResponse.json(
+		return Response.json(
 			{
 				status: 200,
 				data: result,
@@ -37,7 +37,7 @@ export async function POST(request) {
 			{ status: 200 }
 		);
 	} catch (err) {
-		return NextResponse.json(
+		return Response.json(
 			{
 				status: err.status || 500,
 				data: err.data || null,

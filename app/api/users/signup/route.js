@@ -17,12 +17,12 @@ export async function POST(request) {
 			password: body.password,
 		});
 
-		return NextResponse.json(
+		return Response.json(
 			{ status: 201, data: [], message: "Ok" },
 			{ status: 201 }
 		);
 	} catch (err) {
-		return NextResponse.json(
+		return Response.json(
 			{
 				status: err.status || 500,
 				data: err.data || null,
