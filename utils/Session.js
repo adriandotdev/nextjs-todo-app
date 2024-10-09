@@ -58,6 +58,19 @@ export async function decodeAccessToken(session) {
 		return payload;
 	} catch (error) {
 		throw new HttpUnauthorized("INVALID_JWT_ACCESS_TOKEN", {
+			message: "Invalid access token",
+		});
+	}
+}
+
+export async function decodeRefreshToken(session) {
+	try {
+		const { payload } = await jwtVerify(session, refreshTokenEncodedKey, {
+			algorithms: ["HS256"],
+		});
+		return payload;
+	} catch (error) {
+		throw new HttpUnauthorized("INVALID_JWT_REFRESH_TOKEN", {
 			message: "Invalid refresh token",
 		});
 	}
