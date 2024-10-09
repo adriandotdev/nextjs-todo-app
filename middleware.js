@@ -1,3 +1,4 @@
+import { HttpUnauthorized } from "@utils/HttpError";
 import { verifyAccessToken } from "@utils/Session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -7,7 +8,8 @@ import { NextRequest, NextResponse } from "next/server";
  * @param {NextRequest} request
  */
 export default async function middleware(request) {
-	console.log(request.nextUrl.pathname);
+	console.log("URL: " + request.nextUrl.pathname);
+
 	if (request.nextUrl.pathname.match(/\/todo\/*/)) {
 		const result = cookies().get("session");
 
@@ -18,8 +20,19 @@ export default async function middleware(request) {
 			const jwt = await verifyAccessToken(
 				JSON.parse(result.value).access_token
 			);
+
+			return NextResponse.next();
 		} catch (err) {
-			return NextResponse.redirect(new URL("/signin", request.url));
+			console.log(err);
+			return NextResponse.json(
+				{
+					status: err.status || 500,
+					data: err.data || null,
+					message: err.message || "Internal Server Error",
+				},
+				{ status: err.status || 500 }
+			);
+			// return NextResponse.redirect(new URL("/signin", request.url));
 		}
 	} else if (
 		request.nextUrl.pathname === "/signin" ||
@@ -27,12 +40,23 @@ export default async function middleware(request) {
 	) {
 		const result = cookies().get("session");
 
-		try {
-			const jwt = await verifyAccessToken(
-				JSON.parse(result.value).access_token
-			);
+		if (result)
+			try {
+				const jwt = await verifyAccessToken(
+					JSON.parse(result.value).access_token
+				);
 
-			return NextResponse.redirect(new URL("/todo", request.url));
-		} catch (err) {}
+				return NextResponse.redirect(new URL("/todo", request.url));
+			} catch (err) {
+				console.log(err);
+				return NextResponse.json(
+					{
+						status: err.status || 500,
+						data: err.data || null,
+						message: err.message || "Internal Server Error",
+					},
+					{ status: err.status || 500 }
+				);
+			}
 	}
 }

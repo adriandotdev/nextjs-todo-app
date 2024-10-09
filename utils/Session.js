@@ -1,5 +1,6 @@
 import "server-only";
 import { SignJWT, jwtVerify, decodeJwt } from "jose";
+import { HttpUnauthorized } from "./HttpError";
 
 const accessTokenKey = process.env.JWT_ACCESS_TOKEN_KEY;
 const accessTokenEncodedKey = new TextEncoder().encode(accessTokenKey);
@@ -30,7 +31,9 @@ export async function verifyAccessToken(session) {
 		});
 		return payload;
 	} catch (error) {
-		throw error;
+		throw new HttpUnauthorized("INVALID_JWT_ACCESS_TOKEN", {
+			message: "Invalid access token",
+		});
 	}
 }
 
@@ -41,7 +44,9 @@ export async function verifyRefreshToken(session) {
 		});
 		return payload;
 	} catch (error) {
-		throw error;
+		throw new HttpUnauthorized("INVALID_JWT_REFRESH_TOKEN", {
+			message: "Invalid refresh token",
+		});
 	}
 }
 
@@ -52,6 +57,8 @@ export async function decodeAccessToken(session) {
 		});
 		return payload;
 	} catch (error) {
-		throw error;
+		throw new HttpUnauthorized("INVALID_JWT_ACCESS_TOKEN", {
+			message: "Invalid refresh token",
+		});
 	}
 }
