@@ -3,7 +3,7 @@ import { HttpBadRequest, HttpInternalServerError } from "@utils/HttpError";
 
 import bcrypt from "bcrypt";
 
-import { encrypt } from "@utils/Session";
+import { generateAccessToken, generateRefreshToken } from "@utils/Session";
 
 export default class UserService {
 	/**
@@ -55,9 +55,15 @@ export default class UserService {
 					message: "Invalid credentials",
 				});
 
-			const jwt = await encrypt({ username });
+			const data = {
+				username,
+				id: user[0].id,
+			};
 
-			return jwt;
+			const accessToken = await generateAccessToken({ data });
+			const refreshToken = await generateRefreshToken({ data });
+
+			return { access_token: accessToken, refresh_token: refreshToken };
 		} catch (err) {
 			throw err;
 		}

@@ -20,7 +20,7 @@ export async function POST(request) {
 
 		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
-		cookies().set("session", result, {
+		cookies().set("session", JSON.stringify(result), {
 			httpOnly: true,
 			secure: true,
 			expires: expiresAt,
