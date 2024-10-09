@@ -1,6 +1,5 @@
-import { decrypt } from "@utils/Session";
+import { verifyAccessToken } from "@utils/Session";
 import { cookies } from "next/headers";
-import { redirect, RedirectType } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -16,7 +15,9 @@ export default async function middleware(request) {
 			return NextResponse.redirect(new URL("/signin", request.url));
 
 		try {
-			const jwt = await decrypt(result.value);
+			const jwt = await verifyAccessToken(
+				JSON.parse(result.value).access_token
+			);
 		} catch (err) {
 			return NextResponse.redirect(new URL("/signin", request.url));
 		}
@@ -27,7 +28,9 @@ export default async function middleware(request) {
 		const result = cookies().get("session");
 
 		try {
-			const jwt = await decrypt(result.value);
+			const jwt = await verifyAccessToken(
+				JSON.parse(result.value).access_token
+			);
 
 			return NextResponse.redirect(new URL("/todo", request.url));
 		} catch (err) {}
