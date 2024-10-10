@@ -23,16 +23,17 @@ export default async function middleware(request) {
 
 			return NextResponse.next();
 		} catch (err) {
+			console.log("1");
 			console.log(err);
-			return NextResponse.json(
-				{
-					status: err.status || 500,
-					data: err.data || null,
-					message: err.message || "Internal Server Error",
-				},
-				{ status: err.status || 500 }
-			);
-			// return NextResponse.redirect(new URL("/signin", request.url));
+			// return NextResponse.json(
+			// 	{
+			// 		status: err.status || 500,
+			// 		data: err.data || null,
+			// 		message: err.message || "Internal Server Error",
+			// 	},
+			// 	{ status: err.status || 500 }
+			// );
+			return NextResponse.redirect(new URL("/signin", request.url));
 		}
 	} else if (
 		request.nextUrl.pathname === "/signin" ||
@@ -48,15 +49,17 @@ export default async function middleware(request) {
 
 				return NextResponse.redirect(new URL("/todo", request.url));
 			} catch (err) {
+				console.log("2");
 				console.log(err);
-				return NextResponse.json(
-					{
-						status: err.status || 500,
-						data: err.data || null,
-						message: err.message || "Internal Server Error",
-					},
-					{ status: err.status || 500 }
-				);
+				// return NextResponse.json(
+				// 	{
+				// 		status: err.status || 500,
+				// 		data: err.data || null,
+				// 		message: err.message || "Internal Server Error",
+				// 	},
+				// 	{ status: err.status || 500 }
+				// );
+				return NextResponse.next();
 			}
 		}
 
