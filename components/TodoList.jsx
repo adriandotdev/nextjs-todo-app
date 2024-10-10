@@ -1,18 +1,15 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { IconButton } from "@mui/material";
 import AddTodoModal from "./AddTodoModal";
 import Todo from "./Todo";
+import axios from "axios";
 
 const TodoList = () => {
 	// State of list of todos
-	const [todos, setTodos] = useState(() => [
-		{ title: "Task 1", priority: "medium" },
-		{ title: "Task 2", priority: "high" },
-		{ title: "Task 3", priority: "low" },
-	]);
+	const [todos, setTodos] = useState(() => []);
 
 	// State for opening the AddTodoModal.
 	const [modal, setModal] = useState(() => false);
@@ -55,6 +52,34 @@ const TodoList = () => {
 		}
 	};
 
+	const apiClient = axios.create({
+		baseURL: "http://localhost:3000",
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+
+	useEffect(() => {
+		async function GetTodos() {
+			apiClient.interceptors.response.use(
+				(response) => {
+					return response;
+				},
+				async (error) => {
+					if (error.status === 401) {
+						const result = await apiClient.get("/api/refresh");
+					}
+				}
+			);
+
+			const result = await apiClient.get("/api/todos");
+
+			setTodos(result.data.data);
+		}
+
+		GetTodos();
+	}, []);
+
 	return (
 		<>
 			<div className="mt-5 flex gap-3 justify-between w-full max-w-[30rem]">
@@ -73,7 +98,11 @@ const TodoList = () => {
 				onDragOver={OnDragOver}
 			>
 				{todos.map((todo) => (
-					<Todo todo={todo.title} setDraggedElement={setDraggedElement} />
+					<Todo
+						key={todo.id}
+						todo={todo.title}
+						setDraggedElement={setDraggedElement}
+					/>
 				))}
 			</div>
 			{modal && <AddTodoModal setModal={setModal} />}
