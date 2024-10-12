@@ -29,6 +29,7 @@ export async function GET() {
 
 		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
+		cookies().delete("session");
 		cookies().set("session", JSON.stringify({ access_token, refresh_token }), {
 			httpOnly: true,
 			secure: true,

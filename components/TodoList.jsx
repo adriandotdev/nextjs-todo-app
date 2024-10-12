@@ -6,8 +6,11 @@ import { IconButton } from "@mui/material";
 import AddTodoModal from "./AddTodoModal";
 import Todo from "./Todo";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const TodoList = () => {
+	const router = useRouter();
+
 	// State of list of todos
 	const [todos, setTodos] = useState(() => []);
 
@@ -60,24 +63,64 @@ const TodoList = () => {
 	});
 
 	useEffect(() => {
+		let interceptorID;
+
 		async function GetTodos() {
-			apiClient.interceptors.response.use(
+			// Add the response interceptor
+			interceptorID = apiClient.interceptors.response.use(
 				(response) => {
 					return response;
 				},
 				async (error) => {
-					if (error.status === 401) {
-						const result = await apiClient.get("/api/refresh");
+					const originalRequest = error.config;
+
+					if (
+						error.response &&
+						error.response.status === 401 &&
+						!originalRequest._retry
+					) {
+						originalRequest._retry = true;
+
+						try {
+							const result = await axios.get("/api/refresh");
+
+							if (result.status === 200)
+								// Retry the original request with refreshed token
+								return apiClient(originalRequest);
+							else {
+								// If refresh fails, redirect to the sign-in page
+								await axios.get("/api/users/logout");
+								router.push("/signin");
+								return Promise.reject(new Error("Token refresh failed"));
+							}
+						} catch (refreshError) {
+							// In case of refresh failure, redirect to sign-in page and reject
+							await axios.get("/api/users/logout");
+							router.push("/signin");
+							return Promise.reject(refreshError);
+						}
 					}
+
+					// For other types of errors, reject the promise as usual
+					return Promise.reject(error);
 				}
 			);
 
-			const result = await apiClient.get("/api/todos");
-
-			setTodos(result.data.data);
+			// Fetch todos
+			try {
+				const result = await apiClient.get("/api/todos");
+				setTodos(result.data.data);
+			} catch (todosError) {
+				console.error("Error fetching todos:", todosError);
+			}
 		}
 
 		GetTodos();
+
+		// Cleanup interceptor when the component unmounts
+		return () => {
+			apiClient.interceptors.response.eject(interceptorID);
+		};
 	}, []);
 
 	return (
