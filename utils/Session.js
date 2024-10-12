@@ -12,7 +12,7 @@ export async function generateAccessToken(payload) {
 	return new SignJWT(payload)
 		.setProtectedHeader({ alg: "HS256" })
 		.setIssuedAt()
-		.setExpirationTime("8sec")
+		.setExpirationTime("15mins")
 		.sign(accessTokenEncodedKey);
 }
 
@@ -20,7 +20,7 @@ export async function generateRefreshToken(payload) {
 	return new SignJWT(payload)
 		.setProtectedHeader({ alg: "HS256" })
 		.setIssuedAt()
-		.setExpirationTime("1hr")
+		.setExpirationTime("30days")
 		.sign(refreshTokenEncodedKey);
 }
 
