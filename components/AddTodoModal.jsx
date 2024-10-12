@@ -1,19 +1,110 @@
 "use client";
 
 import { CircularProgress, IconButton } from "@mui/material";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import CloseIcon from "@mui/icons-material/Close";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import CustomAlert from "./CustomAlert";
 
-const AddTodoModal = ({ setModal }) => {
+const AddTodoModal = ({ setModal, setTodos }) => {
+	const router = useRouter();
+
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: { errors, isSubmitting },
 	} = useForm();
 
-	const AddNewTodo = (data) => {
-		console.log(errors);
+	const [alert, setAlert] = useState(() => ({
+		is_visible: false,
+		message: "",
+		severity: "",
+	}));
+
+	let interceptorID;
+
+	const apiClient = axios.create({
+		baseURL: process.env.BASE_URL,
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+
+	let timeout = useRef(null);
+
+	const CloseAlert = () => {
+		if (timeout.current) {
+			clearTimeout(timeout.current);
+		}
+
+		timeout.current = setTimeout(() => {
+			setAlert({
+				is_visible: false,
+				message: "",
+				severity: "error",
+			});
+			timeout.current = null;
+		}, 1500);
+	};
+
+	const AddNewTodo = async (data) => {
+		interceptorID = apiClient.interceptors.response.use(
+			(response) => {
+				return response;
+			},
+			async (error) => {
+				const originalRequest = error.config;
+
+				if (
+					error.response &&
+					error.response.status === 401 &&
+					!originalRequest._retry
+				) {
+					originalRequest._retry = true;
+
+					try {
+						const result = await axios.get("/api/refresh");
+
+						if (result.status === 200)
+							// Retry the original request with refreshed token
+							return apiClient(originalRequest);
+						else {
+							// If refresh fails, redirect to the sign-in page
+							await axios.get("/api/users/logout");
+							router.push("/signin");
+							return Promise.reject(new Error("Token refresh failed"));
+						}
+					} catch (refreshError) {
+						// In case of refresh failure, redirect to sign-in page and reject
+						await axios.get("/api/users/logout");
+						router.push("/signin");
+						return Promise.reject(refreshError);
+					}
+				}
+
+				// For other types of errors, reject the promise as usual
+				return Promise.reject(error);
+			}
+		);
+
+		try {
+			const result = await apiClient.post("/api/todos", data);
+			const todos = await axios.get("/api/todos");
+
+			setTodos(todos.data.data);
+			setAlert({
+				is_visible: true,
+				message: "Successfully added new To-Do",
+				severity: "success",
+			});
+			reset();
+			CloseAlert();
+		} catch (todosError) {
+			console.error("Error creating new todo:", todosError);
+		}
 	};
 
 	const CloseModal = (e) => {
@@ -102,6 +193,14 @@ const AddTodoModal = ({ setModal }) => {
 					</button>
 				</form>
 			</div>
+
+			{alert.is_visible && (
+				<CustomAlert
+					is_visible={alert.is_visible}
+					message={alert.message}
+					severity={alert.severity}
+				/>
+			)}
 		</div>
 	);
 };

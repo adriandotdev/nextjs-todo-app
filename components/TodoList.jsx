@@ -56,7 +56,7 @@ const TodoList = () => {
 	};
 
 	const apiClient = axios.create({
-		baseURL: "http://localhost:3000",
+		baseURL: process.env.BASE_URL,
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -148,7 +148,7 @@ const TodoList = () => {
 					/>
 				))}
 			</div>
-			{modal && <AddTodoModal setModal={setModal} />}
+			{modal && <AddTodoModal setModal={setModal} setTodos={setTodos} />}
 		</>
 	);
 };
