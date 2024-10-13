@@ -7,8 +7,8 @@ const SignIn = () => {
 	return (
 		<main className="min-h-[100vh] h-full  flex justify-center items-center">
 			<div className="h-[25rem] max-w-[25rem] w-full  p-7 flex flex-col justify-center items-center">
-				<h1 className="font-bold text-slate-900 text-3xl md:text-5xl mb-4">
-					Sign In
+				<h1 className="font-bold text-slate-900 text-center text-3xl md:text-3xl mb-5">
+					Welcome to <span className="text-orange-400">YourToDo</span>
 				</h1>
 
 				<SignInForm />

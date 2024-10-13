@@ -4,7 +4,7 @@ import { Alert, Container, Fade } from "@mui/material";
 Container;
 const CustomAlert = ({ is_visible, message, severity }) => {
 	return (
-		<div className="absolute top-5 right-10">
+		<div className="absolute top-5">
 			<Fade in={is_visible}>
 				<Alert variant="filled" severity={severity}>
 					{message}

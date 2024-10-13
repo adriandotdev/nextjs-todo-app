@@ -6,8 +6,8 @@ const SignUpPage = () => {
 	return (
 		<main className="min-h-[100vh]   flex justify-center items-center relative">
 			<div className=" max-w-[25rem] w-full  p-7 flex flex-col justify-center items-center ">
-				<h1 className="font-bold text-slate-900 text-3xl md:text-5xl mb-4">
-					Sign Up
+				<h1 className="font-bold text-slate-900 text-center text-3xl md:text-3xl mb-5">
+					Create Your Account
 				</h1>
 				<SignUpForm />
 				<div>
