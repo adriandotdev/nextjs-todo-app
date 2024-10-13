@@ -30,4 +30,12 @@ export default class ToDoService {
 			throw err;
 		}
 	}
+
+	async DeleteTodoByID(id) {
+		try {
+			await this.#repository.DeleteTodoByID(id);
+		} catch (err) {
+			throw err;
+		}
+	}
 }

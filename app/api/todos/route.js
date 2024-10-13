@@ -54,8 +54,34 @@ export async function POST(request) {
 		await service.CreateToDo({ ...data, user_id: payload.data.id });
 
 		return Response.json(
-			{ status: 201, data: [], message: "Ok" },
+			{ status: 201, data: [], message: "Created" },
 			{ status: 201 }
+		);
+	} catch (err) {
+		return Response.json(
+			{
+				status: err.status || 500,
+				data: err.data || null,
+				message: err.message || "Internal Server Error",
+			},
+			{ status: err.status || 500 }
+		);
+	}
+}
+
+/**
+ * @param {NextRequest} request
+ */
+export async function DELETE(request) {
+	try {
+		const { searchParams } = new URL(request.url);
+		const id = searchParams.get("id");
+
+		await service.DeleteTodoByID(parseInt(id, 10));
+
+		return Response.json(
+			{ status: 200, data: [], message: "Ok" },
+			{ status: 200 }
 		);
 	} catch (err) {
 		return Response.json(

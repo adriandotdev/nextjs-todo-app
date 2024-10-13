@@ -45,4 +45,21 @@ export default class ToDoRepository {
 			});
 		});
 	}
+
+	DeleteTodoByID(id) {
+		const QUERY = `
+			DELETE FROM
+				todos
+			WHERE
+				id = ?
+		`;
+
+		return new Promise((resolve, reject) => {
+			mysql.query(QUERY, [id], (err, result) => {
+				if (err) reject(err);
+
+				resolve(result);
+			});
+		});
+	}
 }
