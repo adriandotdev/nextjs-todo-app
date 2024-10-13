@@ -92,7 +92,7 @@ const AddTodoModal = ({ setModal, setTodos }) => {
 
 		try {
 			const result = await apiClient.post("/api/todos", data);
-			const todos = await axios.get("/api/todos");
+			const todos = await apiClient.get("/api/todos");
 
 			setTodos(todos.data.data);
 			setAlert({

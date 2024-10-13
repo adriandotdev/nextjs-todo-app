@@ -7,9 +7,25 @@ import AddTodoModal from "./AddTodoModal";
 import Todo from "./Todo";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import ConfirmationModal from "./ConfirmationModal";
+import CustomAlert from "./CustomAlert";
 
 const TodoList = () => {
 	const router = useRouter();
+
+	// State for ConfirmationModal.jsx
+	const [confirmationModal, setConfirmationModal] = useState({
+		is_visible: false,
+		confirmation_message: "",
+		button_confirmation_text: "",
+		event: null,
+	});
+
+	const [alert, setAlert] = useState(() => ({
+		is_visible: false,
+		message: "",
+		severity: "",
+	}));
 
 	// State of list of todos
 	const [todos, setTodos] = useState(() => []);
@@ -53,6 +69,23 @@ const TodoList = () => {
 		} else {
 			container.current.insertBefore(draggedElement, afterElement);
 		}
+	};
+
+	let timeout = useRef(null);
+
+	const CloseAlert = () => {
+		if (timeout.current) {
+			clearTimeout(timeout.current);
+		}
+
+		timeout.current = setTimeout(() => {
+			setAlert({
+				is_visible: false,
+				message: "",
+				severity: "error",
+			});
+			timeout.current = null;
+		}, 1500);
 	};
 
 	const apiClient = axios.create({
@@ -143,12 +176,30 @@ const TodoList = () => {
 				{todos.map((todo) => (
 					<Todo
 						key={todo.id}
-						todo={todo.title}
+						todo={todo}
+						setTodos={setTodos}
 						setDraggedElement={setDraggedElement}
+						setConfirmationModal={setConfirmationModal}
+						setAlert={setAlert}
+						CloseAlert={CloseAlert}
 					/>
 				))}
 			</div>
 			{modal && <AddTodoModal setModal={setModal} setTodos={setTodos} />}
+			{confirmationModal.is_visible && (
+				<ConfirmationModal
+					confirmationModal={confirmationModal}
+					setConfirmationModal={setConfirmationModal}
+					event={confirmationModal.event}
+				/>
+			)}
+			{alert.is_visible && (
+				<CustomAlert
+					is_visible={alert.is_visible}
+					message={alert.message}
+					severity={alert.severity}
+				/>
+			)}
 		</>
 	);
 };
