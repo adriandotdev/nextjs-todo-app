@@ -6,12 +6,24 @@ import Link from "next/link";
 import { IconButton } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ConfirmationModal from "./ConfirmationModal";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const TodoNavigation = () => {
+	const router = useRouter();
+
 	const [confirmationModal, setConfirmationModal] = useState({
 		is_visible: false,
 		confirmation_message: "",
+		button_confirmation_text: "",
+		event: null,
 	});
+
+	const Logout = async () => {
+		await axios.get("/api/users/logout");
+
+		router.push("/signin");
+	};
 
 	return (
 		<>
@@ -31,6 +43,8 @@ const TodoNavigation = () => {
 								...confirmationModal,
 								is_visible: true,
 								confirmation_message: "Are you sure you want to sign out?",
+								button_confirmation_text: "Sign Out",
+								event: Logout,
 							})
 						}
 					>
@@ -42,6 +56,7 @@ const TodoNavigation = () => {
 				<ConfirmationModal
 					confirmationModal={confirmationModal}
 					setConfirmationModal={setConfirmationModal}
+					event={confirmationModal.event}
 				/>
 			)}
 		</>

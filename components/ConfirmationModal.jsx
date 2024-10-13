@@ -2,22 +2,23 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const ConfirmationModal = ({ confirmationModal, setConfirmationModal }) => {
+const ConfirmationModal = ({
+	confirmationModal,
+	setConfirmationModal,
+	event,
+}) => {
 	const router = useRouter();
 
 	const CloseModal = () => {
 		setConfirmationModal({
 			...confirmationModal,
 			is_visible: false,
+			button_confirmation_text: "",
 			confirmation_message: "",
+			event: null,
 		});
 	};
 
-	const Logout = async () => {
-		await axios.get("/api/users/logout");
-
-		router.push("/signin");
-	};
 	return (
 		<div
 			className="absolute top-0 bottom-0 left-0 right-0 bg-black bg-opacity-25 flex justify-center items-end z-10 lg:items-center"
@@ -26,6 +27,8 @@ const ConfirmationModal = ({ confirmationModal, setConfirmationModal }) => {
 					...confirmationModal,
 					is_visible: false,
 					confirmation_message: "",
+					button_confirmation_text: "",
+					event: null,
 				})
 			}
 		>
@@ -39,9 +42,9 @@ const ConfirmationModal = ({ confirmationModal, setConfirmationModal }) => {
 				<div className="self-end">
 					<button
 						className="bg-red-500 p-2 rounded-md text-white border hover:bg-red-700 transition-all mr-3"
-						onClick={Logout}
+						onClick={event}
 					>
-						Sign Out
+						{confirmationModal.button_confirmation_text}
 					</button>
 					<button
 						className="border-slate-100 p-2 rounded-md text-slate-950 border  transition-all"
