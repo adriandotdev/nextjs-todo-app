@@ -58,6 +58,7 @@ export default class UserService {
 			const data = {
 				username,
 				id: user[0].id,
+				name: user[0].name,
 			};
 
 			const accessToken = await generateAccessToken({ data });

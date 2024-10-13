@@ -5,6 +5,7 @@ export default class UserRepository {
 		const QUERY = `
 		SELECT
 			id,
+			name,
 			username,
 			password
 		FROM
