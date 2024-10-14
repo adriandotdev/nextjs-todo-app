@@ -69,4 +69,19 @@ export default class UserService {
 			throw err;
 		}
 	}
+
+	async GetUserDetailsByID(id) {
+		try {
+			const user = await this.#repository.GetUserDetailsByID(id);
+
+			if (!user.length)
+				throw new HttpBadRequest("USER_NOT_FOUND", {
+					message: `User with ID of ${id} is not found`,
+				});
+
+			return user[0];
+		} catch (err) {
+			throw err;
+		}
+	}
 }

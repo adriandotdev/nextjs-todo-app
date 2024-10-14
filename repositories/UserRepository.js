@@ -40,4 +40,26 @@ export default class UserRepository {
 			});
 		});
 	}
+
+	GetUserDetailsByID(id) {
+		const QUERY = `
+			SELECT
+				id,
+				name,
+				username,
+				password
+			FROM
+				users
+			WHERE
+				id = ?
+		`;
+
+		return new Promise((resolve, reject) => {
+			mysql.query(QUERY, [id], (err, result) => {
+				if (err) reject(err);
+
+				resolve(result);
+			});
+		});
+	}
 }
