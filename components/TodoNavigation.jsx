@@ -102,7 +102,7 @@ const TodoNavigation = () => {
 						<Link href="/todo/list">Todo</Link>
 					</li>
 					<li>
-						<Link href="/notes">Notes</Link>
+						<Link href="/todo/notes">Notes</Link>
 					</li>
 					<li>
 						<IconButton
