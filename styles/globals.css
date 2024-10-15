@@ -5,3 +5,32 @@
 body {
 	@apply overflow-y-auto;
 }
+
+.primary-btn {
+	@apply bg-slate-900 text-slate-100 p-[.3em] rounded-md;
+}
+
+/* .block {
+	@apply text-slate-900 mb-5 relative before:;
+} */
+
+.note-heading1 {
+	@apply font-bold text-2xl text-slate-900 relative;
+}
+
+.note-heading2 {
+	@apply font-bold text-xl text-slate-900 relative;
+}
+
+.block:empty::before {
+	content: attr(data-placeholder) !important;
+	color: #aaa !important; /* Light color for placeholder */
+	position: absolute !important;
+	left: 0 !important; /* Same as padding */
+	top: 0 !important; /* Same as padding */
+	pointer-events: none !important; /* Prevent interaction */
+}
+
+.block:not(:empty)::before {
+	content: none; /* Hide the placeholder when there is content */
+}
