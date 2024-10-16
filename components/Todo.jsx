@@ -12,6 +12,7 @@ const Todo = ({
 	setConfirmationModal,
 	setAlert,
 	CloseAlert,
+	setConfirmationProgress,
 }) => {
 	const OnDragStart = (e) => {
 		setDraggedElement(e.target);
@@ -33,6 +34,8 @@ const Todo = ({
 	let interceptorID;
 
 	const DeleteTask = async (id) => {
+		setConfirmationProgress(true);
+
 		interceptorID = apiClient.interceptors.response.use(
 			(response) => {
 				return response;
@@ -89,6 +92,7 @@ const Todo = ({
 				message: "Task successfully deleted",
 				severity: "success",
 			});
+			setConfirmationProgress(false);
 			CloseAlert();
 		} catch (err) {
 			setAlert({
@@ -102,7 +106,13 @@ const Todo = ({
 
 	return (
 		<div
-			className="draggable bg-white flex justify-between items-center gap-3 border border-gray-200 p-2 max-w-[30rem] w-full mt-5 cursor-move "
+			className={`draggable bg-white flex justify-between items-center gap-3 border border-gray-200 p-2 max-w-[30rem] w-full mt-5 cursor-move ${
+				todo.priority === "low"
+					? "border-l-4 border-l-yellow-500"
+					: todo.priority === "medium"
+					? "border-l-4 border-l-orange-500"
+					: "border-l-4 border-l-red-500"
+			}`}
 			draggable="true"
 			onDragStart={OnDragStart}
 			onDragEnd={OnDragEnd}

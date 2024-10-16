@@ -98,10 +98,10 @@ const TodoNavigation = () => {
 			<div className="flex justify-between items-center px-5 py-3">
 				<h1 className="font-bold text-orange-300">{user.name}</h1>
 				<ul className="text-white flex gap-5 justify-end items-center">
-					<li>
-						<Link href="/todo/list">Todo</Link>
+					<li className="font-bold">
+						<Link href="/todo/list">ToDo</Link>
 					</li>
-					<li>
+					<li className="font-bold">
 						<Link href="/todo/notes">Notes</Link>
 					</li>
 					<li>

@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ConfirmationModal = ({
 	confirmationModal,
 	setConfirmationModal,
 	event,
+	isConfirmationProgress,
 }) => {
 	const router = useRouter();
 
@@ -39,12 +41,16 @@ const ConfirmationModal = ({
 				<h1 className="font-semibold text-lg">
 					{confirmationModal.confirmation_message}
 				</h1>
-				<div className="self-end">
+				<div className="self-end flex">
 					<button
-						className="bg-red-500 p-2 rounded-md text-white border hover:bg-red-700 transition-all mr-3"
+						className="bg-red-500 p-2 rounded-md text-white border hover:bg-red-700 transition-all mr-3 w-full min-w-[9rem]"
 						onClick={event}
 					>
-						{confirmationModal.button_confirmation_text}
+						{isConfirmationProgress ? (
+							<CircularProgress size={"1rem"} />
+						) : (
+							confirmationModal.button_confirmation_text
+						)}
 					</button>
 					<button
 						className="border-slate-100 p-2 rounded-md text-slate-950 border  transition-all"

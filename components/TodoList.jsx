@@ -20,6 +20,9 @@ const TodoList = () => {
 		button_confirmation_text: "",
 		event: null,
 	});
+	const [isConfirmationProgress, setConfirmationProgress] = useState(
+		() => false
+	);
 
 	const [alert, setAlert] = useState(() => ({
 		is_visible: false,
@@ -170,20 +173,27 @@ const TodoList = () => {
 			</div>
 			<div
 				ref={container}
-				className="container max-w-[30rem]"
+				className="container max-w-[30rem] pb-5"
 				onDragOver={OnDragOver}
 			>
-				{todos.map((todo) => (
-					<Todo
-						key={todo.id}
-						todo={todo}
-						setTodos={setTodos}
-						setDraggedElement={setDraggedElement}
-						setConfirmationModal={setConfirmationModal}
-						setAlert={setAlert}
-						CloseAlert={CloseAlert}
-					/>
-				))}
+				{!todos.length ? (
+					<p className="font-bold text-xl text-center p-5">
+						You don't have any ToDos
+					</p>
+				) : (
+					todos.map((todo) => (
+						<Todo
+							key={todo.id}
+							todo={todo}
+							setTodos={setTodos}
+							setDraggedElement={setDraggedElement}
+							setConfirmationModal={setConfirmationModal}
+							setAlert={setAlert}
+							CloseAlert={CloseAlert}
+							setConfirmationProgress={setConfirmationProgress}
+						/>
+					))
+				)}
 			</div>
 			{modal && <AddTodoModal setModal={setModal} setTodos={setTodos} />}
 			{confirmationModal.is_visible && (
@@ -191,6 +201,7 @@ const TodoList = () => {
 					confirmationModal={confirmationModal}
 					setConfirmationModal={setConfirmationModal}
 					event={confirmationModal.event}
+					isConfirmationProgress={isConfirmationProgress}
 				/>
 			)}
 			{alert.is_visible && (
