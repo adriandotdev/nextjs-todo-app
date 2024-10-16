@@ -1,4 +1,9 @@
+/**
+ * @About
+ * This page is for the Notes page editor.
+ */
 "use client";
+
 import MarkdownPreview from "@components/MarkdownPreview";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -7,7 +12,7 @@ const NotesPage = () => {
 
 	const [noteTitle, setNoteTitle] = useState(() => ``);
 	const [md, setMD] = useState(() => ``);
-	const [originalMD, setOriginalMD] = useState(() => ``);
+	const [originalMD, setOriginalMD] = useState(() => ``); // Markdown text without modifying 'new line'
 
 	const noteTitleTextArea = useRef(null);
 	const markdownTextArea = useRef(null);
@@ -17,6 +22,7 @@ const NotesPage = () => {
 
 		setNoteTitle(content);
 	};
+
 	const handleOnChangeOnMarkdownTextArea = (e) => {
 		// Capture the HTML content
 		let content = e.target.value;
@@ -43,7 +49,7 @@ const NotesPage = () => {
 									name="note-title"
 									id="note-title"
 									placeholder="Title"
-									className="max-w-[30rem] w-full overflow-hidden h-auto outline-none resize-none text-3xl font-bold max-h-[2rem] text-slate-900"
+									className="max-w-[30rem] w-full overflow-hidden h-auto outline-none resize-none text-3xl font-bold max-h-[2.5rem] text-slate-900"
 									onChange={handleOnChangeOnNoteTitle}
 									value={noteTitle}
 								></textarea>
@@ -87,13 +93,14 @@ const NotesPage = () => {
 									block.setAttribute("data-placeholder", "Heading 1");
 									block.textContent = "Heading 1";
 									block.addEventListener("input", function () {
-										if (block.textContent.trim() !== "") {
-											block.setAttribute("data-placeholder", "");
+										if (block.innerText.trim().length > 0) {
+											block.classList.add("has-content");
 										} else {
-											console.log(block.textContent);
-											block.setAttribute("data-placeholder", "Heading 1");
+											block.classList.remove("has-content");
 										}
 									});
+
+									// Not working (Needs improvement)
 									block.addEventListener("keydown", function (e) {
 										if (e.key === "Enter") {
 											const selection = window.getSelection();

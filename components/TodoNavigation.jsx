@@ -83,7 +83,7 @@ const TodoNavigation = () => {
 				console.log(result);
 				setUser(result.data.data);
 			} catch (err) {
-				console.error("Error fetching user details:", todosError);
+				console.error("Error fetching user details:", err);
 			}
 		}
 
