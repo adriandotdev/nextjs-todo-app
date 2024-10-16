@@ -49,9 +49,11 @@ const NotesPage = () => {
 									name="note-title"
 									id="note-title"
 									placeholder="Title"
-									className="max-w-[30rem] w-full overflow-hidden h-auto outline-none resize-none text-3xl font-bold max-h-[2.5rem] text-slate-900"
+									className="max-w-[30rem] w-full overflow-hidden h-auto outline-none resize-none text-3xl font-bold min-h-[2.5rem] text-slate-900"
+									rows={2}
 									onChange={handleOnChangeOnNoteTitle}
 									value={noteTitle}
+									maxLength={50}
 								></textarea>
 								{noteTitle && originalMD && (
 									<button
