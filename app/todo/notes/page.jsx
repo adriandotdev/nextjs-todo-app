@@ -50,7 +50,6 @@ const NotesPage = () => {
 									id="note-title"
 									placeholder="Title"
 									className="max-w-[30rem] w-full overflow-hidden h-auto outline-none resize-none text-3xl font-bold min-h-[2.5rem] text-slate-900"
-									rows={2}
 									onChange={handleOnChangeOnNoteTitle}
 									value={noteTitle}
 									maxLength={50}
@@ -70,7 +69,7 @@ const NotesPage = () => {
 							ref={markdownTextArea}
 							name="markdown"
 							id="markdown"
-							className="max-w-[30rem] w-full overflow-x-hidden h-auto min-h-[80vh] outline-none resize-none leading-8 pt-5"
+							className="max-w-[30rem] w-full overflow-x-hidden h-auto min-h-[80vh] outline-none resize-none leading-8 pt-1"
 							placeholder="Create your notes"
 							onChange={handleOnChangeOnMarkdownTextArea}
 							onKeyDown={(e) => {
