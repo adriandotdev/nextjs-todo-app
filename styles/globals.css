@@ -34,3 +34,14 @@ body {
 .block:not(:empty)::before {
 	content: none; /* Hide the placeholder when there is content */
 }
+
+p:empty::before {
+	content: attr(data-placeholder) !important;
+	color: #aaa !important; /* Light color for placeholder */
+
+	pointer-events: none !important; /* Prevent interaction */
+}
+
+p:not(:empty)::before {
+	content: none; /* Hide the placeholder when there is content */
+}

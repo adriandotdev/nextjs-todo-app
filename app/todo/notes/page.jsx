@@ -73,11 +73,37 @@ const NotesPage = () => {
 							placeholder="Create your notes"
 							onChange={handleOnChangeOnMarkdownTextArea}
 							onKeyDown={(e) => {
-								// if (e.key === "Tab") {
-								// 	e.preventDefault();
-								// 	const newValue = md + "    ";
-								// 	setMD(newValue);
-								// }
+								if (e.key === "Enter") {
+									e.preventDefault(); // Prevent the default action of the "Enter" key
+
+									// Get the current selection/caret position
+									const selection = window.getSelection();
+									const range = selection.getRangeAt(0);
+									let currentNode = range.startContainer;
+
+									// Create a new <p> element
+									const newParagraph = document.createElement("p");
+									newParagraph.setAttribute("data-placeholder", "Type here...");
+									// newParagraph.textContent = "New paragraph here...";
+
+									// Check if currentNode is a text node, if so, get the parent element
+									if (currentNode.nodeType === Node.TEXT_NODE) {
+										currentNode = currentNode.parentNode;
+									}
+									console.log("TYPE OF CURRENT NODE: " + currentNode);
+									// Insert the <p> element after the current heading
+									const parentNode = currentNode.closest("h1, h2, p"); // Assuming cursor is in <h1> or <h2>
+									if (parentNode) {
+										parentNode.insertAdjacentElement("afterend", newParagraph);
+
+										// Move the cursor to the newly created paragraph
+										const newRange = document.createRange();
+										newRange.setStart(newParagraph, 0);
+										newRange.collapse(true);
+										selection.removeAllRanges();
+										selection.addRange(newRange);
+									}
+								}
 							}}
 							onInput={handleOnChangeOnMarkdownTextArea}
 							value={originalMD}
