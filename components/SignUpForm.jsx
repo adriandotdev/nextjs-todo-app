@@ -97,10 +97,8 @@ const SignUpForm = () => {
 						Name
 					</label>
 					<input
-						className={`p-2 border ${
-							errors.name?.message
-								? "border-red-500 outline-red-500"
-								: "border outline-black"
+						className={`input input-bordered ${
+							errors.name?.message ? "input-error" : "input-bordered"
 						}`}
 						type="text"
 						name="name"
@@ -120,10 +118,8 @@ const SignUpForm = () => {
 						Username
 					</label>
 					<input
-						className={`p-2 border ${
-							errors.username?.message
-								? "border-red-500 outline-red-500"
-								: "border outline-black"
+						className={`input input-bordered ${
+							errors.username?.message ? "input-error" : "input-bordered"
 						}`}
 						type="text"
 						name="username"
@@ -149,10 +145,8 @@ const SignUpForm = () => {
 						Password
 					</label>
 					<input
-						className={`p-2 border ${
-							errors.password?.message
-								? "border-red-500 outline-red-500"
-								: "border outline-black"
+						className={`input input-bordered ${
+							errors.password?.message ? "input-error" : "input-bordered"
 						}`}
 						type="password"
 						name="password"
@@ -178,10 +172,8 @@ const SignUpForm = () => {
 						Confirm Your Password
 					</label>
 					<input
-						className={`p-2 border ${
-							errors.confirmPassword?.message
-								? "border-red-500 outline-red-500"
-								: "border outline-black"
+						className={`input input-bordered ${
+							errors.confirmPassword?.message ? "input-error" : "input-bordered"
 						}`}
 						type="password"
 						name="confirmPassword"
@@ -204,7 +196,7 @@ const SignUpForm = () => {
 
 				<button
 					disabled={isSubmitting}
-					className="font-bold bg-slate-900 text-white p-3 mt-3 cursor-pointer hover:bg-slate-800 transition-all active:scale-110 active:bg-slate-600 rounded-md"
+					className="btn font-bold bg-slate-900 text-white p-3 mt-3 cursor-pointer hover:bg-slate-800 transition-all active:scale-110 active:bg-slate-600 rounded-md"
 				>
 					{isSubmitting ? <CircularProgress size={"1em"} /> : "Sign Up"}
 				</button>

@@ -3,7 +3,7 @@ import React from "react";
 import "@styles/globals.css";
 const RootLayout = ({ children }) => {
 	return (
-		<html>
+		<html data-theme="light">
 			<body>{children}</body>
 		</html>
 	);
