@@ -38,4 +38,12 @@ export default class ToDoService {
 			throw err;
 		}
 	}
+
+	async UpdateTodoByID(id, payload) {
+		try {
+			await this.#repository.UpdateTodoByID(id, payload);
+		} catch (err) {
+			throw err;
+		}
+	}
 }

@@ -62,4 +62,29 @@ export default class ToDoRepository {
 			});
 		});
 	}
+
+	UpdateTodoByID(id, payload) {
+		const QUERY = `
+			UPDATE 
+				todos
+			SET
+				title = ?,
+                priority = ?,
+                date_modified = NOW()
+			WHERE 
+				id = ? 
+		`;
+
+		return new Promise((resolve, reject) => {
+			mysql.query(
+				QUERY,
+				[payload.title, payload.priority, id],
+				(err, result) => {
+					if (err) reject(err);
+
+					resolve(result);
+				}
+			);
+		});
+	}
 }

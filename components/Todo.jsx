@@ -13,6 +13,8 @@ const Todo = ({
 	setAlert,
 	CloseAlert,
 	setConfirmationProgress,
+	setUpdateTodoModal,
+	setTodoToUpdate,
 }) => {
 	const OnDragStart = (e) => {
 		setDraggedElement(e.target);
@@ -134,7 +136,14 @@ const Todo = ({
 				>
 					<DeleteIcon />
 				</IconButton>
-				<IconButton color="primary" aria-label="delete">
+				<IconButton
+					color="primary"
+					aria-label="update"
+					onClick={() => {
+						setUpdateTodoModal(true);
+						setTodoToUpdate(todo);
+					}}
+				>
 					<EditIcon />
 				</IconButton>
 				<IconButton color="success" aria-label="delete">

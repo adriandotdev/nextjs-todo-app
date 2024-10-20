@@ -94,3 +94,29 @@ export async function DELETE(request) {
 		);
 	}
 }
+
+/**
+ * @param {NextRequest} request
+ */
+export async function PUT(request) {
+	try {
+		const { searchParams } = new URL(request.url);
+		const id = searchParams.get("id");
+		const payload = await request.json();
+		await service.UpdateTodoByID(id, payload);
+
+		return Response.json(
+			{ status: 200, data: [], message: "Ok" },
+			{ status: 200 }
+		);
+	} catch (err) {
+		return Response.json(
+			{
+				status: err.status || 500,
+				data: err.data || null,
+				message: err.message || "Internal Server Error",
+			},
+			{ status: err.status || 500 }
+		);
+	}
+}

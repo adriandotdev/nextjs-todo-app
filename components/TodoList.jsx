@@ -11,6 +11,7 @@ import ConfirmationModal from "./ConfirmationModal";
 import CustomAlert from "./CustomAlert";
 import Image from "next/image";
 import AllDoneLogo from "../assets/images/all_done.png";
+import UpdateTodoModal from "./UpdateTodoModal";
 const TodoList = () => {
 	const router = useRouter();
 
@@ -35,7 +36,11 @@ const TodoList = () => {
 	const [todos, setTodos] = useState(() => []);
 
 	// State for opening the AddTodoModal.
-	const [modal, setModal] = useState(() => false);
+	const [addTodoModal, setAddTodoModal] = useState(() => false);
+
+	// State for opening UpdateTodoModal
+	const [updateTodoModal, setUpdateTodoModal] = useState(() => false);
+	const [todoToUpdate, setTodoToUpdate] = useState(() => undefined);
 
 	// State for fetching data
 	const [isFetchingTodo, setFetchingTodo] = useState(() => true);
@@ -173,7 +178,7 @@ const TodoList = () => {
 				<IconButton
 					color="primary"
 					aria-label="add"
-					onClick={() => setModal(true)}
+					onClick={() => setAddTodoModal(true)}
 				>
 					<AddIcon />
 				</IconButton>
@@ -207,11 +212,22 @@ const TodoList = () => {
 							setAlert={setAlert}
 							CloseAlert={CloseAlert}
 							setConfirmationProgress={setConfirmationProgress}
+							setUpdateTodoModal={setUpdateTodoModal}
+							setTodoToUpdate={setTodoToUpdate}
 						/>
 					))
 				)}
 			</div>
-			{modal && <AddTodoModal setModal={setModal} setTodos={setTodos} />}
+			{addTodoModal && (
+				<AddTodoModal setModal={setAddTodoModal} setTodos={setTodos} />
+			)}
+			{updateTodoModal && (
+				<UpdateTodoModal
+					setModal={setUpdateTodoModal}
+					setTodos={setTodos}
+					todoToUpdate={todoToUpdate}
+				/>
+			)}
 			{confirmationModal.is_visible && (
 				<ConfirmationModal
 					confirmationModal={confirmationModal}
