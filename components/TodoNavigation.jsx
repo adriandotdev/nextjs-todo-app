@@ -20,9 +20,16 @@ const TodoNavigation = () => {
 		button_confirmation_text: "",
 		event: null,
 	});
+	const [isConfirmationProgress, setConfirmationProgress] = useState(
+		() => false
+	);
 
 	const Logout = async () => {
+		setConfirmationProgress(true);
+
 		await axios.get("/api/users/logout");
+
+		setConfirmationProgress(false);
 
 		router.push("/signin");
 	};
@@ -99,7 +106,7 @@ const TodoNavigation = () => {
 				<h1 className="font-bold text-orange-300">{user.name}</h1>
 				<ul className="text-white flex gap-5 justify-end items-center">
 					<li className="font-bold">
-						<Link href="/todo/list">ToDo</Link>
+						<Link href="/todo/list">To-Dos</Link>
 					</li>
 					<li className="font-bold">
 						<Link href="/todo/notes">Notes</Link>
@@ -129,6 +136,7 @@ const TodoNavigation = () => {
 					confirmationModal={confirmationModal}
 					setConfirmationModal={setConfirmationModal}
 					event={confirmationModal.event}
+					isConfirmationProgress={isConfirmationProgress}
 				/>
 			)}
 		</>

@@ -9,7 +9,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import ConfirmationModal from "./ConfirmationModal";
 import CustomAlert from "./CustomAlert";
-
+import Image from "next/image";
+import AllDoneLogo from "../assets/images/all_done.png";
 const TodoList = () => {
 	const router = useRouter();
 
@@ -35,6 +36,9 @@ const TodoList = () => {
 
 	// State for opening the AddTodoModal.
 	const [modal, setModal] = useState(() => false);
+
+	// State for fetching data
+	const [isFetchingTodo, setFetchingTodo] = useState(() => true);
 
 	// State for knowing which todo element is dragged by the user.
 	const [draggedElement, setDraggedElement] = useState(null);
@@ -99,6 +103,8 @@ const TodoList = () => {
 	});
 
 	useEffect(() => {
+		setFetchingTodo(true);
+
 		let interceptorID;
 
 		async function GetTodos() {
@@ -146,6 +152,7 @@ const TodoList = () => {
 			try {
 				const result = await apiClient.get("/api/todos");
 				setTodos(result.data.data);
+				setFetchingTodo(false);
 			} catch (todosError) {
 				console.error("Error fetching todos:", todosError);
 			}
@@ -176,10 +183,19 @@ const TodoList = () => {
 				className="container max-w-[30rem] pb-5"
 				onDragOver={OnDragOver}
 			>
-				{!todos.length ? (
+				{isFetchingTodo ? (
 					<p className="font-bold text-xl text-center p-5">
-						You don't have any ToDos
+						Fetching your To-Dos...
 					</p>
+				) : !todos.length ? (
+					<div className="flex justify-center">
+						<Image
+							src={AllDoneLogo}
+							width={250}
+							height={250}
+							alt="Picture of the author"
+						/>
+					</div>
 				) : (
 					todos.map((todo) => (
 						<Todo
