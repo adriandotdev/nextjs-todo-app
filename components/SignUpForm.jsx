@@ -11,8 +11,11 @@ import axios from "axios";
 import { CircularProgress } from "@mui/material";
 
 import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
 
 const SignUpForm = () => {
+	const router = useRouter();
+
 	const [alert, setAlert] = useState(() => ({
 		is_visible: false,
 		message: "",
@@ -61,6 +64,10 @@ const SignUpForm = () => {
 
 				CloseAlert();
 				reset();
+
+				setTimeout(() => {
+					router.push("/signin");
+				}, 1500);
 			}
 		} catch (err) {
 			if (err.status !== 200) {
