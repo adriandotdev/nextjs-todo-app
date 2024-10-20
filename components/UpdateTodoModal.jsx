@@ -47,6 +47,7 @@ const UpdateTodoModal = ({ setModal, setTodos, todoToUpdate }) => {
 				message: "",
 				severity: "error",
 			});
+			CloseModal();
 			timeout.current = null;
 		}, 1500);
 	};
@@ -112,7 +113,7 @@ const UpdateTodoModal = ({ setModal, setTodos, todoToUpdate }) => {
 	};
 
 	const CloseModal = (e) => {
-		e.stopPropagation();
+		if (e) e.stopPropagation();
 
 		setModal(false);
 	};
