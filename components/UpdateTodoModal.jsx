@@ -132,7 +132,7 @@ const UpdateTodoModal = ({ setModal, setTodos, todoToUpdate }) => {
 			>
 				<div className="flex justify-between">
 					<h1 className="font-bold text-xl lg:text-2xl xl:text-2xl">
-						What's your new To-Do?
+						Update your To-Do
 					</h1>
 					<IconButton
 						color="error"
