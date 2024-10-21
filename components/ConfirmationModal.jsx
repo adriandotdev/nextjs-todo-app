@@ -1,5 +1,3 @@
-import axios from "axios";
-import { useRouter } from "next/navigation";
 import React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -9,8 +7,6 @@ const ConfirmationModal = ({
 	event,
 	isConfirmationProgress,
 }) => {
-	const router = useRouter();
-
 	const CloseModal = () => {
 		setConfirmationModal({
 			...confirmationModal,
@@ -43,7 +39,8 @@ const ConfirmationModal = ({
 				</h1>
 				<div className="self-end flex">
 					<button
-						className="bg-red-500 p-2 rounded-md text-white border hover:bg-red-700 transition-all mr-3 w-full min-w-[9rem]"
+						disabled={isConfirmationProgress}
+						className="btn-md font-bold bg-red-500 p-2 rounded-md text-white border hover:bg-red-700 transition-all mr-3 w-full min-w-[9rem] disabled:bg-gray-300"
 						onClick={event}
 					>
 						{isConfirmationProgress ? (
@@ -53,7 +50,7 @@ const ConfirmationModal = ({
 						)}
 					</button>
 					<button
-						className="border-slate-100 p-2 rounded-md text-slate-950 border  transition-all"
+						className="btn border-slate-100 p-2 rounded-md text-slate-950 border  transition-all"
 						onClick={CloseModal}
 					>
 						Cancel

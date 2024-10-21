@@ -151,10 +151,8 @@ const AddTodoModal = ({ setModal, setTodos }) => {
 									message: "Title must be maximum of 8 characters",
 								},
 							})}
-							className={`p-2 border ${
-								errors.title?.message
-									? "border-red-500 outline-red-500"
-									: "border outline-black"
+							className={`input input-bordered ${
+								errors.title?.message ? "input-error" : "input input-bordered"
 							}`}
 							type="text"
 							name="title"
@@ -175,7 +173,7 @@ const AddTodoModal = ({ setModal, setTodos }) => {
 
 						<select
 							{...register("priority", { required: true })}
-							className="border p-2"
+							className="select select-bordered p-2"
 							name="priority"
 							id="priority"
 						>
@@ -187,7 +185,7 @@ const AddTodoModal = ({ setModal, setTodos }) => {
 
 					<button
 						disabled={isSubmitting}
-						className="font-bold bg-slate-900 text-white p-3 mt-3 cursor-pointer hover:bg-slate-800 transition-all active:scale-110 active:bg-slate-600 rounded-md"
+						className="btn font-bold bg-slate-900 text-white p-3 mt-3 cursor-pointer hover:bg-slate-800 transition-all active:scale-110 active:bg-slate-600 rounded-md"
 					>
 						{isSubmitting ? <CircularProgress size={"1em"} /> : "Add"}
 					</button>
