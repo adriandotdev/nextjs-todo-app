@@ -23,7 +23,7 @@ const TodoNavigation = () => {
 	const [isConfirmationProgress, setConfirmationProgress] = useState(
 		() => false
 	);
-	const [menu, showMenu] = useState(() => true);
+	const [menu, showMenu] = useState(() => false);
 	const menuRef = useRef();
 
 	const Logout = async () => {
