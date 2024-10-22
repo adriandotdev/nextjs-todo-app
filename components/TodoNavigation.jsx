@@ -135,16 +135,16 @@ const TodoNavigation = () => {
 
 						<li className="inline-block relative">
 							<button
-								className="btn btn-ghost"
+								className="btn btn-ghost btn-md btn-circle"
 								onClick={(e) => {
 									e.stopPropagation();
 									showMenu(menu ? false : true);
 								}}
 							>
 								<ul className="flex gap-1">
-									<li className="w-[.5rem] h-[.5rem] bg-white rounded-full"></li>
-									<li className="w-[.5rem] h-[.5rem] bg-white rounded-full"></li>
-									<li className="w-[.5rem] h-[.5rem] bg-white rounded-full"></li>
+									<li className="w-[.4rem] h-[.4rem] bg-white rounded-full"></li>
+									<li className="w-[.4rem] h-[.4rem] bg-white rounded-full"></li>
+									<li className="w-[.4rem] h-[.4rem] bg-white rounded-full"></li>
 								</ul>
 							</button>
 							{menu && (
@@ -153,8 +153,8 @@ const TodoNavigation = () => {
 									className="bg-slate-950 rounded-md absolute z-10 right-0 mt-2  min-w-[10rem] "
 								>
 									<ul className="w-full font-semibold rounded-md">
-										<li className=" text-white text-center hover:bg-slate-700 transition-all rounded-tl-md rounded-tr-md">
-											<button className="w-full px-5 py-3">Profile</button>
+										<li className=" text-white text-center hover:cursor-pointer hover:bg-slate-700 transition-all rounded-tl-md rounded-tr-md w-full px-5 py-3">
+											<Link href="/profile">Profile</Link>
 										</li>
 										<li
 											className=" text-white text-center hover:bg-slate-700 transition-all rounded-bl-md rounded-br-md"
