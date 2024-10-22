@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import Link from "next/link";
 import { IconButton } from "@mui/material";
@@ -23,6 +23,8 @@ const TodoNavigation = () => {
 	const [isConfirmationProgress, setConfirmationProgress] = useState(
 		() => false
 	);
+	const [menu, showMenu] = useState(() => false);
+	const menuRef = useRef();
 
 	const Logout = async () => {
 		setConfirmationProgress(true);
@@ -100,35 +102,83 @@ const TodoNavigation = () => {
 			apiClient.interceptors.response.eject(interceptorID);
 		};
 	}, []);
+
+	const handleClickOutside = (event) => {
+		if (menuRef.current && !menuRef.current.contains(event.target)) {
+			showMenu(false);
+		}
+	};
+
+	useEffect(() => {
+		// Add event listener for clicks
+		document.addEventListener("mousedown", handleClickOutside);
+
+		// Clean up the event listener on component unmount
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
 	return (
 		<>
-			<div className="navbar px-5">
-				<h1 className="font-bold text-orange-300 flex-1">{user.name}</h1>
-				<ul className="text-white flex gap-5 justify-end items-center">
-					<li className="font-bold">
-						<Link href="/todo/list">To-Dos</Link>
-					</li>
-					<li className="font-bold">
-						<Link href="/todo/notes">Notes</Link>
-					</li>
-					<li>
-						<IconButton
-							aria-label="logout"
-							color="error"
-							onClick={() =>
-								setConfirmationModal({
-									...confirmationModal,
-									is_visible: true,
-									confirmation_message: "Are you sure you want to sign out?",
-									button_confirmation_text: "Sign Out",
-									event: Logout,
-								})
-							}
-						>
-							<LogoutIcon />
-						</IconButton>
-					</li>
-				</ul>
+			<div className="navbar px-5" onClick={(e) => showMenu(false)}>
+				<div className="flex-1">
+					<h1 className="font-bold text-orange-300 flex-1">{user.name}</h1>
+				</div>
+				<div className="flex-none">
+					<ul className=" text-white flex gap-5 justify-end items-center">
+						<li className="font-bold">
+							<Link href="/todo/list">To-Dos</Link>
+						</li>
+						<li className="font-bold">
+							<Link href="/todo/notes">Notes</Link>
+						</li>
+
+						<li className="inline-block relative">
+							<button
+								className="btn btn-ghost"
+								onClick={(e) => {
+									e.stopPropagation();
+									showMenu(menu ? false : true);
+								}}
+							>
+								<ul className="flex gap-1">
+									<li className="w-[.5rem] h-[.5rem] bg-white rounded-full"></li>
+									<li className="w-[.5rem] h-[.5rem] bg-white rounded-full"></li>
+									<li className="w-[.5rem] h-[.5rem] bg-white rounded-full"></li>
+								</ul>
+							</button>
+							{menu && (
+								<div
+									ref={menuRef}
+									className="bg-slate-950 rounded-md absolute z-10 right-0 mt-2  min-w-[10rem] "
+								>
+									<ul className="w-full font-semibold rounded-md">
+										<li className=" text-white text-center hover:bg-slate-700 transition-all rounded-tl-md rounded-tr-md">
+											<button className="w-full px-5 py-3">Profile</button>
+										</li>
+										<li
+											className=" text-white text-center hover:bg-slate-700 transition-all rounded-bl-md rounded-br-md"
+											onClick={() => {
+												setConfirmationModal({
+													...confirmationModal,
+													is_visible: true,
+													confirmation_message:
+														"Are you sure you want to sign out?",
+													button_confirmation_text: "Sign Out",
+													event: Logout,
+												});
+											}}
+										>
+											<button className="w-full px-5 py-3 text-red-500">
+												Logout
+											</button>
+										</li>
+									</ul>
+								</div>
+							)}
+						</li>
+					</ul>
+				</div>
 			</div>
 
 			{confirmationModal.is_visible && (
