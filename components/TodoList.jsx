@@ -189,9 +189,21 @@ const TodoList = () => {
 				onDragOver={OnDragOver}
 			>
 				{isFetchingTodo ? (
-					<p className="font-bold text-xl text-center p-5">
-						Fetching your To-Dos...
-					</p>
+					<section className="flex flex-col gap-3 mt-5">
+						{[1, 2, 3].map((value) => (
+							<div
+								key={value}
+								className="skeleton w-full h-[4rem] flex justify-between items-center px-5 "
+							>
+								<div className="skeleton w-[3rem] h-[1rem] bg-gray-400"></div>
+								<div className="flex gap-3">
+									<div className="w-[2rem] h-[2rem] rounded-full skeleton bg-gray-400"></div>
+									<div className="w-[2rem] h-[2rem] rounded-full skeleton bg-gray-400"></div>
+									<div className="w-[2rem] h-[2rem] rounded-full skeleton bg-gray-400"></div>
+								</div>
+							</div>
+						))}
+					</section>
 				) : !todos.length ? (
 					<div className="flex justify-center">
 						<Image
