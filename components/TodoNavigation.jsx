@@ -154,7 +154,7 @@ const TodoNavigation = () => {
 								>
 									<ul className="w-full font-semibold rounded-md">
 										<li className=" text-white text-center hover:cursor-pointer hover:bg-slate-700 transition-all rounded-tl-md rounded-tr-md w-full px-5 py-3">
-											<Link href="/profile">Profile</Link>
+											<Link href="/todo/profile">Profile</Link>
 										</li>
 										<li
 											className=" text-white text-center hover:bg-slate-700 transition-all rounded-bl-md rounded-br-md"
