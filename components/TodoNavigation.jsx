@@ -24,6 +24,7 @@ const TodoNavigation = () => {
 		() => false
 	);
 	const [menu, showMenu] = useState(() => false);
+	const [dataInProgress, setDataInProgress] = useState(() => true);
 	const menuRef = useRef();
 
 	const Logout = async () => {
@@ -91,6 +92,7 @@ const TodoNavigation = () => {
 
 				console.log(result);
 				setUser(result.data.data);
+				setDataInProgress(false);
 			} catch (err) {
 				console.error("Error fetching user details:", err);
 			}
@@ -120,10 +122,20 @@ const TodoNavigation = () => {
 	}, []);
 	return (
 		<>
-			<div className="navbar px-5" onClick={(e) => showMenu(false)}>
-				<div className="flex-1">
-					<h1 className="font-bold text-orange-300 flex-1">{user.name}</h1>
-				</div>
+			<div
+				className="navbar px-5 justify-between"
+				onClick={(e) => showMenu(false)}
+			>
+				{dataInProgress ? (
+					<section className="max-w-[7rem] w-full">
+						<div className="skeleton w-full  h-[1rem] "></div>
+					</section>
+				) : (
+					<div className="">
+						<h1 className="font-bold text-orange-300 flex-1">{user.name}</h1>
+					</div>
+				)}
+
 				<div className="flex-none">
 					<ul className=" text-white flex gap-5 justify-end items-center">
 						<li className="font-bold">
