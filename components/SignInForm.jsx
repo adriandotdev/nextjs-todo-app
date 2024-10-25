@@ -112,7 +112,7 @@ const SignInForm = () => {
 							required: "Please provide your password",
 						})}
 						className={`input input-bordered ${
-							errors.username?.message ? "input-error" : "input-bordered"
+							errors.password?.message ? "input-error" : "input-bordered"
 						}`}
 						type="password"
 						name="password"
