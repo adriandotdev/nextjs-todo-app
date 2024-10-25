@@ -77,3 +77,39 @@ export async function PUT(request) {
 		);
 	}
 }
+
+/**
+ *
+ * @param {NextRequest} request
+ */
+export async function DELETE(request) {
+	try {
+		const session = cookies().get("session");
+
+		const payload = await decodeAccessToken(
+			JSON.parse(session.value).access_token
+		);
+
+		await service.DeleteUserAccountByID(payload.data.id);
+
+		cookies().delete("session");
+
+		return Response.json(
+			{
+				status: 200,
+				data: [],
+				message: "Ok",
+			},
+			{ status: 200 }
+		);
+	} catch (err) {
+		return Response.json(
+			{
+				status: err.status || 500,
+				data: err.data || null,
+				message: err.message || "Internal Server Error",
+			},
+			{ status: err.status || 500 }
+		);
+	}
+}

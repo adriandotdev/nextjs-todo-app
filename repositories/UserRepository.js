@@ -76,4 +76,21 @@ export default class UserRepository {
 			});
 		});
 	}
+
+	DeleteUserAccountByID(id) {
+		const QUERY = `
+			DELETE FROM
+				users
+			WHERE
+				id = ?
+		`;
+
+		return new Promise((resolve, reject) => {
+			mysql.query(QUERY, [id], (err, result) => {
+				if (err) reject(err);
+
+				resolve(result);
+			});
+		});
+	}
 }

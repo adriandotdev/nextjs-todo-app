@@ -125,4 +125,12 @@ export default class UserService {
 			throw err;
 		}
 	}
+
+	async DeleteUserAccountByID(id) {
+		try {
+			await this.#repository.DeleteUserAccountByID(id);
+		} catch (err) {
+			throw err;
+		}
+	}
 }
