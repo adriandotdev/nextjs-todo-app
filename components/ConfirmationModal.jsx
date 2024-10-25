@@ -31,7 +31,7 @@ const ConfirmationModal = ({
 			}
 		>
 			<div
-				className="bg-white xl:max-w-[30rem] w-full pt-5 px-4 rounded-md flex flex-col justify-between max-h-[10rem] h-full pb-4"
+				className="bg-white lg:max-w-[30rem] xl:max-w-[30rem] w-full pt-5 px-4 rounded-md flex flex-col justify-between max-h-[10rem] h-full pb-4"
 				onClick={(e) => e.stopPropagation()}
 			>
 				<h1 className="font-semibold text-lg">
