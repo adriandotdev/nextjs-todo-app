@@ -35,3 +35,45 @@ export async function GET() {
 		);
 	}
 }
+
+/**
+ *
+ * @param {NextRequest} request
+ */
+export async function PUT(request) {
+	try {
+		const data = await request.json();
+
+		const session = cookies().get("session");
+
+		const payload = await decodeAccessToken(
+			JSON.parse(session.value).access_token
+		);
+
+		const result = await service.UpdateUserDetailsByID({
+			name: data.name,
+			username: data.username,
+			password: data.password,
+			current_password: data.current_password,
+			id: payload.data.id,
+		});
+
+		return Response.json(
+			{
+				status: 200,
+				data: result,
+				message: "Ok",
+			},
+			{ status: 200 }
+		);
+	} catch (err) {
+		return Response.json(
+			{
+				status: err.status || 500,
+				data: err.data || null,
+				message: err.message || "Internal Server Error",
+			},
+			{ status: err.status || 500 }
+		);
+	}
+}

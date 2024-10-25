@@ -62,4 +62,18 @@ export default class UserRepository {
 			});
 		});
 	}
+
+	UpdateUserDetailsByID(payload) {
+		const { name, username, password, current_password, id } = payload;
+
+		const QUERY = `CALL SP_UPDATE_USER_DETAILS(?,?,?,?)`;
+
+		return new Promise((resolve, reject) => {
+			mysql.query(QUERY, [name, username, password, id], (err, result) => {
+				if (err) reject(err);
+
+				resolve(result);
+			});
+		});
+	}
 }

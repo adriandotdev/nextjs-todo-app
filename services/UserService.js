@@ -84,4 +84,45 @@ export default class UserService {
 			throw err;
 		}
 	}
+
+	async UpdateUserDetailsByID(payload) {
+		try {
+			console.log(payload);
+			const user = await this.#repository.GetUserDetailsByID(payload.id);
+
+			let hashedNewPassword = null;
+
+			if (payload.current_password) {
+				const isMatch = await bcrypt.compare(
+					payload.current_password,
+					user[0].password
+				);
+
+				if (!isMatch)
+					throw new HttpBadRequest("INCORRECT_PASSWORD", {
+						message: "Incorrect password",
+					});
+				hashedNewPassword = await bcrypt.hash(payload.password, 10);
+			}
+
+			const result = await this.#repository.UpdateUserDetailsByID({
+				name: payload.name,
+				username: payload.username,
+				password: hashedNewPassword ? hashedNewPassword : payload.password,
+				id: payload.id,
+			});
+
+			const STATUS = result[0][0].STATUS;
+			const status_type = result[0][0].status_type;
+
+			if (status_type === "bad_request") throw new HttpBadRequest(STATUS, null);
+
+			if (status_type === "internal_server_error")
+				throw new HttpInternalServerError(STATUS, null);
+
+			return result[0][0];
+		} catch (err) {
+			throw err;
+		}
+	}
 }
