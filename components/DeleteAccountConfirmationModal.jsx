@@ -39,7 +39,7 @@ const DeleteAccountConfirmationModal = ({
 			}
 		>
 			<div
-				className="bg-white lg:max-w-[30rem] xl:max-w-[30rem] w-full pt-5 px-4 rounded-md flex flex-col max-h-[14rem] h-full pb-4 gap-3"
+				className="bg-white lg:max-w-[30rem] xl:max-w-[30rem] w-full pt-5 px-4 rounded-md flex flex-col max-h-[20rem] h-auto pb-4 gap-3"
 				onClick={(e) => e.stopPropagation()}
 			>
 				<h1 className="font-bold text-lg text-red-500">
