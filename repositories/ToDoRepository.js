@@ -29,6 +29,7 @@ export default class ToDoRepository {
                 id,
                 title,
                 priority,
+				status,
                 date_created,
                 date_modified
             FROM
@@ -85,6 +86,25 @@ export default class ToDoRepository {
 					resolve(result);
 				}
 			);
+		});
+	}
+
+	UpdateTodoStatusByID(id, status) {
+		const QUERY = `
+			UPDATE 
+				todos
+			SET
+				status = ?
+			WHERE
+				id = ?
+		`;
+
+		return new Promise((resolve, reject) => {
+			mysql.query(QUERY, [status, id], (err, result) => {
+				if (err) reject(err);
+
+				resolve(result);
+			});
 		});
 	}
 }

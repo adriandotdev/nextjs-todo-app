@@ -123,3 +123,27 @@ export async function PUT(request) {
 		);
 	}
 }
+
+export async function PATCH(request) {
+	try {
+		const { searchParams } = new URL(request.url);
+		const id = searchParams.get("id");
+		const status = searchParams.get("status");
+
+		await service.UpdateTodoStatusByID(id, status);
+
+		return Response.json(
+			{ status: 200, data: [], message: "Ok" },
+			{ status: 200 }
+		);
+	} catch (err) {
+		return Response.json(
+			{
+				status: err.status || 500,
+				data: err.data || null,
+				message: err.message || "Internal Server Error",
+			},
+			{ status: err.status || 500 }
+		);
+	}
+}
