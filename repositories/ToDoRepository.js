@@ -7,9 +7,9 @@ export default class ToDoRepository {
 		const QUERY = `
 
             INSERT INTO
-                todos (title, priority, user_id)
+                todos (title, priority, user_id, status)
             VALUES
-                (?,?,?)
+                (?,?,?, 'pending')
         `;
 
 		return new Promise((resolve, reject) => {
@@ -22,7 +22,7 @@ export default class ToDoRepository {
 	}
 
 	GetTodosByUserId(data) {
-		const { id } = data;
+		const { id, status } = data;
 
 		const QUERY = `
             SELECT
@@ -34,11 +34,11 @@ export default class ToDoRepository {
             FROM
                 todos
             WHERE
-                user_id = ?
+                user_id = ? AND status = ?
         `;
 
 		return new Promise((resolve, reject) => {
-			mysql.query(QUERY, [id], (err, result) => {
+			mysql.query(QUERY, [id, status], (err, result) => {
 				if (err) reject(err);
 
 				resolve(result);

@@ -20,7 +20,10 @@ export async function GET(request) {
 			JSON.parse(session.value).access_token
 		);
 
-		const todos = await service.GetTodosByUserId({ id: payload.data.id });
+		const todos = await service.GetTodosByUserId({
+			id: payload.data.id,
+			status: request.nextUrl.searchParams.get("status"),
+		});
 
 		return Response.json(
 			{ status: 200, data: todos, message: "Ok" },
