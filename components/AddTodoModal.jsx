@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import CustomAlert from "./CustomAlert";
 
-const AddTodoModal = ({ setModal, setTodos }) => {
+const AddTodoModal = ({ setModal, setTodos, tabs, setTabs }) => {
 	const router = useRouter();
 
 	const {
@@ -92,7 +92,7 @@ const AddTodoModal = ({ setModal, setTodos }) => {
 
 		try {
 			const result = await apiClient.post("/api/todos", data);
-			const todos = await apiClient.get("/api/todos");
+			const todos = await apiClient.get(`/api/todos?status=pending`);
 
 			setTodos(todos.data.data);
 			setAlert({
@@ -100,6 +100,20 @@ const AddTodoModal = ({ setModal, setTodos }) => {
 				message: "Successfully added new To-Do",
 				severity: "success",
 			});
+			setTabs(
+				tabs.map((tab) => {
+					if (tab.tabName === "Pending") {
+						return {
+							...tab,
+							active: true,
+						};
+					}
+					return {
+						...tab,
+						active: false,
+					};
+				})
+			);
 			reset();
 			CloseAlert();
 		} catch (todosError) {
@@ -115,7 +129,7 @@ const AddTodoModal = ({ setModal, setTodos }) => {
 
 	return (
 		<div
-			className="bg-black bg-opacity-20 fixed top-0 left-0 right-0 bottom-0 flex justify-center items-end lg:items-center"
+			className="bg-black bg-opacity-20 fixed top-0 left-0 right-0 bottom-0 flex justify-center items-end lg:items-center z-20"
 			onClick={CloseModal}
 		>
 			<div

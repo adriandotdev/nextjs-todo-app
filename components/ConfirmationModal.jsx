@@ -37,6 +37,9 @@ const ConfirmationModal = ({
 				<h1 className="font-semibold text-lg">
 					{confirmationModal.confirmation_message}
 				</h1>
+				<p className="font-bold text-xl text-slate-900">
+					{confirmationModal.data || ""}
+				</p>
 				<div className="self-end flex">
 					<button
 						disabled={isConfirmationProgress}

@@ -12,6 +12,7 @@ import CustomAlert from "./CustomAlert";
 import Image from "next/image";
 import AllDoneLogo from "../assets/images/all_done.png";
 import UpdateTodoModal from "./UpdateTodoModal";
+
 const TodoList = () => {
 	const router = useRouter();
 
@@ -21,11 +22,13 @@ const TodoList = () => {
 		confirmation_message: "",
 		button_confirmation_text: "",
 		event: null,
+		data: null,
 	});
 	const [isConfirmationProgress, setConfirmationProgress] = useState(
 		() => false
 	);
 
+	// State for Alert
 	const [alert, setAlert] = useState(() => ({
 		is_visible: false,
 		message: "",
@@ -47,6 +50,53 @@ const TodoList = () => {
 
 	// State for knowing which todo element is dragged by the user.
 	const [draggedElement, setDraggedElement] = useState(null);
+
+	// State for tabs
+	const [tabs, setTabs] = useState(() => [
+		{
+			tabName: "Pending",
+			active: true,
+			event: () => {
+				setTabs(
+					tabs.map((tab) => {
+						if (tab.tabName === "Pending") {
+							return {
+								...tab,
+								active: true,
+							};
+						}
+						return {
+							...tab,
+							active: false,
+						};
+					})
+				);
+
+				GetTodos("pending");
+			},
+		},
+		{
+			tabName: "Completed",
+			active: false,
+			event: () => {
+				setTabs(
+					tabs.map((tab) => {
+						if (tab.tabName === "Completed") {
+							return {
+								...tab,
+								active: true,
+							};
+						}
+						return {
+							...tab,
+							active: false,
+						};
+					})
+				);
+				GetTodos("completed");
+			},
+		},
+	]);
 
 	// Container of the todo to drag over.
 	const container = useRef(null);
@@ -107,63 +157,63 @@ const TodoList = () => {
 		},
 	});
 
+	let interceptorID;
+
+	async function GetTodos(status) {
+		// Add the response interceptor
+		interceptorID = apiClient.interceptors.response.use(
+			(response) => {
+				return response;
+			},
+			async (error) => {
+				const originalRequest = error.config;
+
+				if (
+					error.response &&
+					error.response.status === 401 &&
+					!originalRequest._retry
+				) {
+					originalRequest._retry = true;
+
+					try {
+						const result = await axios.get("/api/refresh");
+
+						if (result.status === 200)
+							// Retry the original request with refreshed token
+							return apiClient(originalRequest);
+						else {
+							// If refresh fails, redirect to the sign-in page
+							await axios.get("/api/users/logout");
+							router.push("/signin");
+							return Promise.reject(new Error("Token refresh failed"));
+						}
+					} catch (refreshError) {
+						// In case of refresh failure, redirect to sign-in page and reject
+						await axios.get("/api/users/logout");
+						router.push("/signin");
+						return Promise.reject(refreshError);
+					}
+				}
+
+				// For other types of errors, reject the promise as usual
+				return Promise.reject(error);
+			}
+		);
+
+		// Fetch todos
+		try {
+			const result = await apiClient.get(`/api/todos?status=${status}`);
+			setTodos(result.data.data);
+			setFetchingTodo(false);
+		} catch (todosError) {
+			console.error("Error fetching todos:", todosError);
+		}
+	}
+
 	useEffect(() => {
 		setFetchingTodo(true);
 
-		let interceptorID;
-
-		async function GetTodos() {
-			// Add the response interceptor
-			interceptorID = apiClient.interceptors.response.use(
-				(response) => {
-					return response;
-				},
-				async (error) => {
-					const originalRequest = error.config;
-
-					if (
-						error.response &&
-						error.response.status === 401 &&
-						!originalRequest._retry
-					) {
-						originalRequest._retry = true;
-
-						try {
-							const result = await axios.get("/api/refresh");
-
-							if (result.status === 200)
-								// Retry the original request with refreshed token
-								return apiClient(originalRequest);
-							else {
-								// If refresh fails, redirect to the sign-in page
-								await axios.get("/api/users/logout");
-								router.push("/signin");
-								return Promise.reject(new Error("Token refresh failed"));
-							}
-						} catch (refreshError) {
-							// In case of refresh failure, redirect to sign-in page and reject
-							await axios.get("/api/users/logout");
-							router.push("/signin");
-							return Promise.reject(refreshError);
-						}
-					}
-
-					// For other types of errors, reject the promise as usual
-					return Promise.reject(error);
-				}
-			);
-
-			// Fetch todos
-			try {
-				const result = await apiClient.get("/api/todos");
-				setTodos(result.data.data);
-				setFetchingTodo(false);
-			} catch (todosError) {
-				console.error("Error fetching todos:", todosError);
-			}
-		}
-
-		GetTodos();
+		GetTodos("pending");
 
 		// Cleanup interceptor when the component unmounts
 		return () => {
@@ -182,6 +232,21 @@ const TodoList = () => {
 				>
 					<AddIcon />
 				</IconButton>
+			</div>
+
+			<div
+				role="tablist"
+				className="tabs tabs-lifted w-full max-w-[30rem] mt-5"
+			>
+				{tabs.map((tab) => (
+					<a
+						role="tab"
+						className={`tab font-bold ${tab.active && "tab-active"}`}
+						onClick={tab.event}
+					>
+						{tab.tabName}
+					</a>
+				))}
 			</div>
 			<div
 				ref={container}
@@ -231,7 +296,12 @@ const TodoList = () => {
 				)}
 			</div>
 			{addTodoModal && (
-				<AddTodoModal setModal={setAddTodoModal} setTodos={setTodos} />
+				<AddTodoModal
+					setModal={setAddTodoModal}
+					setTodos={setTodos}
+					tabs={tabs}
+					setTabs={setTabs}
+				/>
 			)}
 			{updateTodoModal && (
 				<UpdateTodoModal

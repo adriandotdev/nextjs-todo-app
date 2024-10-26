@@ -80,7 +80,7 @@ const Todo = ({
 		try {
 			await apiClient.delete(`/api/todos?id=${id}`);
 
-			const todos = await apiClient.get("/api/todos");
+			const todos = await apiClient.get("/api/todos?status=pending");
 
 			setTodos(todos.data.data);
 			setConfirmationModal({
@@ -131,6 +131,7 @@ const Todo = ({
 								"Are you sure you want to delete this task?",
 							button_confirmation_text: "Yes, remove this task",
 							event: () => DeleteTask(todo.id),
+							data: todo.title,
 						});
 					}}
 				>

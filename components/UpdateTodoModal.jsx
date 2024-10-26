@@ -97,7 +97,7 @@ const UpdateTodoModal = ({ setModal, setTodos, todoToUpdate }) => {
 				`/api/todos?id=${todoToUpdate.id}`,
 				data
 			);
-			const todos = await apiClient.get("/api/todos");
+			const todos = await apiClient.get("/api/todos?status=pending");
 
 			setTodos(todos.data.data);
 			setAlert({
