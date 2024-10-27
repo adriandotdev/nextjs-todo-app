@@ -47,7 +47,8 @@ export default class UserRepository {
 				id,
 				name,
 				username,
-				password
+				password,
+				profile_photo_url
 			FROM
 				users
 			WHERE
@@ -87,6 +88,25 @@ export default class UserRepository {
 
 		return new Promise((resolve, reject) => {
 			mysql.query(QUERY, [id], (err, result) => {
+				if (err) reject(err);
+
+				resolve(result);
+			});
+		});
+	}
+
+	UpdateProfilePhotoByUserID(id, profile_photo_url) {
+		const QUERY = `
+			UPDATE 
+				users
+			SET
+				profile_photo_url = ?
+			WHERE
+				id = ?
+		`;
+
+		return new Promise((resolve, reject) => {
+			mysql.query(QUERY, [profile_photo_url, id], (err, result) => {
 				if (err) reject(err);
 
 				resolve(result);

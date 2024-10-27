@@ -113,3 +113,41 @@ export async function DELETE(request) {
 		);
 	}
 }
+
+/**
+ * @param {NextRequest} request
+ */
+export async function PATCH(request) {
+	try {
+		const data = await request.json();
+
+		const session = cookies().get("session");
+
+		const payload = await decodeAccessToken(
+			JSON.parse(session.value).access_token
+		);
+
+		await service.UpdateProfilePhotoByUserID(
+			payload.data.id,
+			data.profile_photo_url
+		);
+
+		return Response.json(
+			{
+				status: 200,
+				data: [],
+				message: "Ok",
+			},
+			{ status: 200 }
+		);
+	} catch (err) {
+		return Response.json(
+			{
+				status: err.status || 500,
+				data: err.data || null,
+				message: err.message || "Internal Server Error",
+			},
+			{ status: err.status || 500 }
+		);
+	}
+}
