@@ -407,6 +407,7 @@ const UpdateProfileForm = () => {
 				onSuccess={async (results) => {
 					await EditProfilePhoto({ profile_photo_url: results.info.url });
 				}}
+				options={{ maxFiles: 1, multiple: false }}
 			>
 				{({ open }) => {
 					return (
