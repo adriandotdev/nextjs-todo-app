@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 import Link from "next/link";
 import { IconButton } from "@mui/material";
@@ -8,11 +8,13 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import ConfirmationModal from "./ConfirmationModal";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import SessionContext from "@contexts/SessionContext";
 
 const TodoNavigation = () => {
 	const router = useRouter();
+	const { user, setUser } = useContext(SessionContext);
 
-	const [user, setUser] = useState(() => ({}));
+	// const [user, setUser] = useState(() => ({}));
 
 	const [confirmationModal, setConfirmationModal] = useState({
 		is_visible: false,
@@ -126,15 +128,25 @@ const TodoNavigation = () => {
 				className="navbar px-5 justify-between"
 				onClick={(e) => showMenu(false)}
 			>
-				{dataInProgress ? (
-					<section className="max-w-[7rem] w-full">
-						<div className="skeleton w-full  h-[1rem] "></div>
-					</section>
-				) : (
-					<div className="">
-						<h1 className="font-bold text-orange-300 flex-1">{user.name}</h1>
+				<Link href="/todo/list">
+					<div className="avatar placeholder cursor-pointer">
+						<div className="bg-neutral text-neutral-content w-12 rounded-full  border-slate-800 border-2">
+							{!user ? (
+								<div className="skeleton h-12 w-12 rounded-full"></div>
+							) : !user.profile_photo_url ? (
+								<span className="text-3xl">
+									{user.name.substring(0, 2).toUpperCase()}
+								</span>
+							) : (
+								<img
+									src={user.profile_photo_url}
+									alt="Profile"
+									className="rounded-full w-full h-full"
+								/>
+							)}
+						</div>
 					</div>
-				)}
+				</Link>
 
 				<div className="flex-none">
 					<ul className=" text-white flex gap-5 justify-end items-center">

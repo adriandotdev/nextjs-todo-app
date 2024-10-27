@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { useForm } from "react-hook-form";
 
 import EditIcon from "@mui/icons-material/Edit";
@@ -10,10 +10,12 @@ import CustomAlert from "@components/CustomAlert";
 import { CircularProgress } from "@mui/material";
 import DeleteAccountConfirmationModal from "./DeleteAccountConfirmationModal";
 import { useRouter } from "next/navigation";
-import { CldUploadButton, CldUploadWidget } from "next-cloudinary";
+import { CldUploadWidget } from "next-cloudinary";
+import SessionContext from "@contexts/SessionContext";
 
 const UpdateProfileForm = () => {
 	const router = useRouter();
+	const { user, setUser } = useContext(SessionContext);
 
 	const {
 		register,
@@ -41,7 +43,7 @@ const UpdateProfileForm = () => {
 		},
 	}));
 
-	const [user, setUser] = useState(() => null);
+	// const [user, setUser] = useState(() => null);
 
 	const [dataInProgress, setDataProgress] = useState(() => true);
 
@@ -412,8 +414,8 @@ const UpdateProfileForm = () => {
 							className="avatar placeholder cursor-pointer"
 							onClick={() => open()}
 						>
-							<div className="bg-neutral text-neutral-content w-20 rounded-full">
-								{!user ? (
+							<div className="bg-neutral text-neutral-content w-20 rounded-full  border-slate-800 border-2">
+								{!user || dataInProgress ? (
 									<div className="skeleton h-20 w-20 rounded-full"></div>
 								) : !user.profile_photo_url ? (
 									<span className="text-3xl">
