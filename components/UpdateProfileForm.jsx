@@ -308,6 +308,7 @@ const UpdateProfileForm = () => {
 		try {
 			await apiClient.patch("/api/users/details", {
 				profile_photo_url: data.profile_photo_url,
+				public_id: data.public_id,
 			});
 
 			const result = await apiClient.get("/api/users/details");
@@ -405,7 +406,10 @@ const UpdateProfileForm = () => {
 			<CldUploadWidget
 				uploadPreset="ml_default"
 				onSuccess={async (results) => {
-					await EditProfilePhoto({ profile_photo_url: results.info.url });
+					await EditProfilePhoto({
+						profile_photo_url: results.info.url,
+						public_id: results.info.public_id,
+					});
 				}}
 				options={{ maxFiles: 1, multiple: false }}
 			>

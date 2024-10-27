@@ -134,14 +134,25 @@ export default class UserService {
 		}
 	}
 
-	async UpdateProfilePhotoByUserID(id, profile_photo_url) {
+	async UpdateProfilePhotoByUserID(id, profile_photo_url, public_id) {
 		try {
 			const result = await this.#repository.UpdateProfilePhotoByUserID(
 				id,
-				profile_photo_url
+				profile_photo_url,
+				public_id
 			);
 
 			return result;
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	async GetProfilePhotoPublicIDByUserID(id) {
+		try {
+			const result = await this.#repository.GetProfilePhotoPublicIDByUserID(id);
+
+			return result[0].public_id;
 		} catch (err) {
 			throw err;
 		}

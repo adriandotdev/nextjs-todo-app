@@ -95,18 +95,38 @@ export default class UserRepository {
 		});
 	}
 
-	UpdateProfilePhotoByUserID(id, profile_photo_url) {
+	UpdateProfilePhotoByUserID(id, profile_photo_url, public_id) {
 		const QUERY = `
 			UPDATE 
 				users
 			SET
-				profile_photo_url = ?
+				profile_photo_url = ?,
+				public_id = ?
 			WHERE
 				id = ?
 		`;
 
 		return new Promise((resolve, reject) => {
-			mysql.query(QUERY, [profile_photo_url, id], (err, result) => {
+			mysql.query(QUERY, [profile_photo_url, public_id, id], (err, result) => {
+				if (err) reject(err);
+
+				resolve(result);
+			});
+		});
+	}
+
+	GetProfilePhotoPublicIDByUserID(id) {
+		const QUERY = `
+			SELECT
+				public_id
+			FROM
+				users
+			WHERE
+				id = ?
+		`;
+
+		return new Promise((resolve, reject) => {
+			mysql.query(QUERY, [id], (err, result) => {
 				if (err) reject(err);
 
 				resolve(result);
