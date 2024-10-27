@@ -19,6 +19,7 @@
 		"marked": "^14.1.2",
 		"mysql2": "^3.11.3",
 		"next": "14.2.13",
+		"next-cloudinary": "^6.16.0",
 		"react": "^18",
 		"react-dom": "^18",
 		"react-hook-form": "^7.53.0",
