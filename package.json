@@ -15,6 +15,7 @@
 		"@mui/material": "^6.1.2",
 		"axios": "^1.7.7",
 		"bcrypt": "^5.1.1",
+		"cloudinary": "^2.5.1",
 		"jose": "^5.9.3",
 		"marked": "^14.1.2",
 		"mysql2": "^3.11.3",
