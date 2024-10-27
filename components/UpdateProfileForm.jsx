@@ -10,6 +10,7 @@ import CustomAlert from "@components/CustomAlert";
 import { CircularProgress } from "@mui/material";
 import DeleteAccountConfirmationModal from "./DeleteAccountConfirmationModal";
 import { useRouter } from "next/navigation";
+import { CldUploadButton, CldUploadWidget } from "next-cloudinary";
 
 const UpdateProfileForm = () => {
 	const router = useRouter();
@@ -103,6 +104,7 @@ const UpdateProfileForm = () => {
 				? data.new_password
 				: user.password,
 			current_password: data.current_password,
+			profile_photo_url: user.profile_photo_url,
 		};
 
 		console.log(payload);
@@ -150,6 +152,7 @@ const UpdateProfileForm = () => {
 			const result = await apiClient.put("/api/users/details", payload);
 
 			if (result.status === 200) {
+				console.log(result.data.data);
 				setUser(result.data.data);
 				setProfile({
 					name: {
@@ -260,6 +263,65 @@ const UpdateProfileForm = () => {
 			CloseAlert();
 		}
 	};
+
+	const EditProfilePhoto = async (data) => {
+		let interceptorID = apiClient.interceptors.response.use(
+			(response) => {
+				return response;
+			},
+			async (error) => {
+				const originalRequest = error.config;
+
+				if (
+					error.response &&
+					error.response.status === 401 &&
+					!originalRequest._retry
+				) {
+					originalRequest._retry = true;
+
+					try {
+						const result = await axios.get("/api/refresh");
+
+						if (result.status === 200)
+							// Retry the original request with refreshed token
+							return apiClient(originalRequest);
+						else {
+							// If refresh fails, redirect to the sign-in page
+							await axios.get("/api/users/logout");
+							router.push("/signin");
+							return Promise.reject(new Error("Token refresh failed"));
+						}
+					} catch (refreshError) {
+						// In case of refresh failure, redirect to sign-in page and reject
+						await axios.get("/api/users/logout");
+						router.push("/signin");
+						return Promise.reject(refreshError);
+					}
+				}
+
+				// For other types of errors, reject the promise as usual
+				return Promise.reject(error);
+			}
+		);
+		try {
+			await apiClient.patch("/api/users/details", {
+				profile_photo_url: data.profile_photo_url,
+			});
+
+			const result = await apiClient.get("/api/users/details");
+
+			setUser(result.data.data);
+
+			setAlert({
+				is_visible: true,
+				message: "Profile updated successfully",
+				severity: "success",
+			});
+
+			CloseAlert();
+		} catch (err) {}
+	};
+
 	useEffect(() => {
 		setDataProgress(true);
 
@@ -338,6 +400,37 @@ const UpdateProfileForm = () => {
 
 	return (
 		<>
+			<CldUploadWidget
+				uploadPreset="ml_default"
+				onSuccess={async (results) => {
+					await EditProfilePhoto({ profile_photo_url: results.info.url });
+				}}
+			>
+				{({ open }) => {
+					return (
+						<div
+							className="avatar placeholder cursor-pointer"
+							onClick={() => open()}
+						>
+							<div className="bg-neutral text-neutral-content w-20 rounded-full">
+								{!user ? (
+									<div className="skeleton h-20 w-20 rounded-full"></div>
+								) : !user.profile_photo_url ? (
+									<span className="text-3xl">
+										{user.name.substring(0, 2).toUpperCase()}
+									</span>
+								) : (
+									<img
+										src={user.profile_photo_url}
+										alt="Profile"
+										className="rounded-full w-full h-full"
+									/>
+								)}
+							</div>
+						</div>
+					);
+				}}
+			</CldUploadWidget>
 			<form
 				className="max-w-[25rem] w-full flex flex-col gap-3 mt-3"
 				onSubmit={handleSubmit(EditProfile)}
